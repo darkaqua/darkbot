@@ -35,13 +35,13 @@ bot.on('message', message => {
     if(!message.author.bot){
         if(message.mentions.users.findKey("id", bot.user.id) != null){
             message.reply(" lo siento, aún no puedo hacer nada..!");
+            message.reply("Ayudame a mejorar con tu aportación... https://github.com/darkaqua/darkbot");
         }
     }
 });
 
 //Usuario nuevo en el servidor
 bot.on("guildMemberAdd", guildMemberAdd => {
-    console.log(guildMemberAdd);
     var channel = bot.channels.find("name", "bienvenida");
     channel.sendMessage(guildMemberAdd + " se ha unido al servidor!");
     console.log(guildMemberAdd.name + " se ha unido al servidor!");
