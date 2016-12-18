@@ -14,7 +14,7 @@ bot.on('ready', () => {
     console.log('Here we go! ❤');
 });
 
-/**
+/**a
  * @deprecated Usado para debug
  */
 function delete100Messages(){
