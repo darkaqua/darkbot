@@ -13,14 +13,14 @@ const commands = require("./Commands");
 const config = JSON.parse(fs.readFileSync("./config.json"));
 const handler = createHandler({ path: '/webhook', secret: config['handlerHash'] });
 
-const port = process.argv[2];
+const port = process.argv[2] ? process.argv[2] : 7777;
 
 http.createServer(function (req, res) {
     handler(req, res, function (err) {
         res.statusCode = 202;
         res.end('no such location');
     });
-}).listen(7777);
+}).listen(port);
 
 handler.on("error", (err) => {
     console.error('Error:', err.message)
@@ -31,7 +31,7 @@ handler.on("release", (event) => {
     process.chdir("..");
     child_process.execSync("git clone https://github.com/darkaqua/darkbot");
     child_process.execSync("mv darkbot " + tagName);
-    process.chdir("tagName");
+    process.chdir(tagName);
     child_process.execSync("npm install");
     child_process.spawn("node", ["Main.js", (port == 7777) ? 7777 : 7778], { detached: true });
     process.exit();
