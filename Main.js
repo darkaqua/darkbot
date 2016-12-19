@@ -21,8 +21,6 @@ try {
     child_process.exec("screen -X -S darkbot_" + lastVersion + " quit");
 } catch (ignored) {}
 
-lastVersion = lastVersion ? lastVersion : "0.1";//test
-
 http.createServer(function (req, res) {
     handler(req, res, function (err) {
         res.statusCode = 202;
@@ -34,6 +32,10 @@ let channel = [];
 
 bot.on('ready', () => {
     console.log('Here we go! ❤');
+    console.log("-Port: " + port);
+    console.log("-Last versión: " + lastVersion);
+    console.log("-Current versión: " + currentVersion);
+
     bot.user.setGame("versión " + currentVersion + " ❤");
     channel['bienvenida'] = bot.channels.find("name", "bienvenida");
 });
@@ -53,7 +55,7 @@ handler.on("release", (event) => {
     } catch (ignored) {}
     child_process.execSync("screen -dmS darkbot_" + tagName + "");
     child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff 'node Main.js'");
-    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff ' " + ((port == 7777) ? "7778" : "7777") + " " + lastVersion + " " + tagName + " '");
+    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff ' " + ((port == 7777) ? "7778" : "7777") + " " + currentVersion + " " + tagName + " '");
     child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff '^M'");//^M
     process.exit();
 });
