@@ -33,7 +33,7 @@ let channel = [];
 
 bot.on('ready', () => {
     console.log('Here we go! ❤');
-    bot.status = "versión " + lastVersion + "❤";
+    bot.user.setGame("versión " + lastVersion + " ❤");
     channel['bienvenida'] = bot.channels.find("name", "bienvenida");
 });
 
