@@ -86,4 +86,4 @@ $RECYCLE.BIN/
 
 *.idea
 
-/token.txt
+config.json

@@ -3,33 +3,42 @@
  */
 
 const fs = require('fs');
+const http = require('http');
 const Discord = require('discord.js');
-const commands = require("./Commands");
+const child_process = require("child_process");
+const createHandler = require('github-webhook-handler');
 
 const bot = new Discord.Client();
+const commands = require("./Commands");
+const config = JSON.parse(fs.readFileSync("./config.json"));
+const handler = createHandler({ path: '/webhook', secret: config['handlerHash'] });
 
-const token = fs.readFileSync("token.txt", 'utf8');
+const port = process.argv[2];
 
+http.createServer(function (req, res) {
+    handler(req, res, function (err) {
+        res.statusCode = 202;
+        res.end('no such location');
+    });
+}).listen(7777);
+
+handler.on("error", (err) => {
+    console.error('Error:', err.message)
+});
+
+handler.on("release", (event) => {
+    let tagName = event.payload.release.tag_name;
+    process.chdir("..");
+    child_process.execSync("git clone https://github.com/darkaqua/darkbot");
+    child_process.execSync("mv darkbot " + tagName);
+    process.chdir("tagName");
+    child_process.spawn("node", ["Main.js", (port == 7777) ? 7777 : 7778], { detached: true });
+    process.exit();
+});
 
 bot.on('ready', () => {
     console.log('Here we go! ❤');
 });
-
-/**a
- * @deprecated Usado para debug
- */
-function delete100Messages(){
-    const channel = bot.channels.find("name", "bienvenida");
-    channel.fetchMessages({limit: 100})
-        .then(messages => {
-            for (let i = 0; i < messages.array().length; i++) {
-                const message = messages.array()[i];
-                console.log(message.id + " <- Deleted!");
-                message.delete();
-            }
-        })
-        .catch(console.error);
-}
 
 bot.on('message', message => {
     // console.log(bot.permissions);//member.roles.findKey("name", "adm")
@@ -56,4 +65,4 @@ bot.on("guildMemberAdd", guildMemberAdd => {
     console.log(guildMemberAdd.name + " se ha unido al servidor!");
 });
 
-bot.login(token);
+bot.login(config['token']);
