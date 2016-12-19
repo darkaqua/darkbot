@@ -33,7 +33,7 @@ handler.on("release", (event) => {
     child_process.execSync("mv darkbot " + tagName);
     process.chdir(tagName);
     child_process.execSync("npm install");
-    child_process.spawn("node", ["Main.js", (port == 7777) ? 7777 : 7778], { detached: true });
+    child_process.spawn("node", ["Main.js", (port == 7777) ? 7778 : 7777], { detached: true });
     process.exit();
 });
 
