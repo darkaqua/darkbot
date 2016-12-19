@@ -10,26 +10,12 @@ const bot = new Discord.Client();
 
 const token = fs.readFileSync("token.txt", 'utf8');
 
+let channel = [];
 
 bot.on('ready', () => {
     console.log('Here we go! ❤');
+    channel['bienvenida'] = bot.channels.find("name", "bienvenida");
 });
-
-/**a
- * @deprecated Usado para debug
- */
-function delete100Messages(){
-    const channel = bot.channels.find("name", "bienvenida");
-    channel.fetchMessages({limit: 100})
-        .then(messages => {
-            for (let i = 0; i < messages.array().length; i++) {
-                const message = messages.array()[i];
-                console.log(message.id + " <- Deleted!");
-                message.delete();
-            }
-        })
-        .catch(console.error);
-}
 
 bot.on('message', message => {
     // console.log(bot.permissions);//member.roles.findKey("name", "adm")
@@ -51,9 +37,13 @@ bot.on('message', message => {
 
 //Usuario nuevo en el servidor
 bot.on("guildMemberAdd", guildMemberAdd => {
-    const channel = bot.channels.find("name", "bienvenida");
-    channel.sendMessage(guildMemberAdd + " se ha unido al servidor!");
+    channel['bienvenida'].sendMessage(guildMemberAdd + " se ha unido al servidor! :upside_down:");
     console.log(guildMemberAdd.name + " se ha unido al servidor!");
+});
+
+bot.on("guildMemberRemove", guildMemberRemove => {
+    channel['bienvenida'].sendMessage(guildMemberRemove + " se ha ido del servidor! :(");
+    console.log(guildMemberRemove.name + " se ha ido del servidor!");
 });
 
 bot.login(token);
