@@ -35,7 +35,7 @@ handler.on("release", (event) => {
     try {
         child_process.execSync("npm install");
     } catch (ignored) {}
-    child_process.spawn("node", ["Main.js", (port == 7777) ? 7777 : 7778], { detached: true });
+    child_process.spawn("node", ["Main.js", (port == 7777) ? 7778 : 7777], { detached: true });
     process.exit();
 });
 
