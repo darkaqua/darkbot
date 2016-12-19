@@ -21,7 +21,7 @@ try {
     child_process.exec("screen -X -S darkbot_" + lastVersion + " quit");
 } catch (ignored) {}
 
-lastVersion = lastVersion ? lastVersion : "0.1";
+lastVersion = lastVersion ? lastVersion : "0.1";//test
 
 http.createServer(function (req, res) {
     handler(req, res, function (err) {
