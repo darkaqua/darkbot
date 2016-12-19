@@ -32,7 +32,9 @@ handler.on("release", (event) => {
     child_process.execSync("git clone https://github.com/darkaqua/darkbot");
     child_process.execSync("mv darkbot " + tagName);
     process.chdir(tagName);
-    child_process.execSync("npm install");
+    try {
+        child_process.execSync("npm install");
+    } catch (ignored) {}
     child_process.spawn("node", ["Main.js", (port == 7777) ? 7778 : 7777], { detached: true });
     process.exit();
 });
