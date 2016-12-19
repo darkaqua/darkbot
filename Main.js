@@ -13,7 +13,14 @@ const commands = require("./Commands");
 const config = JSON.parse(fs.readFileSync("../config.json"));
 const handler = createHandler({ path: '/webhook', secret: config['handlerHash'] });
 
-const port = process.argv[2] ? 7778 : 7777;
+const port = process.argv[2] ? process.argv[2] : 7777;
+let lastVersion = process.argv[3];
+
+try {
+    child_process.exec("screen -X -S darkbot_" + lastVersion + " quit");
+} catch (ignored) {}
+
+lastVersion = lastVersion ? lastVersion : "0.1";
 
 http.createServer(function (req, res) {
     handler(req, res, function (err) {
@@ -26,6 +33,7 @@ let channel = [];
 
 bot.on('ready', () => {
     console.log('Here we go! ❤');
+    bot.status = "versión " + lastVersion + "❤";
     channel['bienvenida'] = bot.channels.find("name", "bienvenida");
 });
 
@@ -42,7 +50,10 @@ handler.on("release", (event) => {
     try {
         child_process.execSync("npm install");
     } catch (ignored) {}
-    child_process.spawn("node", ["Main.js", (port == 7777) ? 7778 : 7777], { detached: true });
+    child_process.execSync("screen -dmS darkbot_" + tagName + "");
+    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff 'node Main.js'");
+    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff ' " + ((port == 7777) ? "7778" : "7777") + " " + lastVersion + " '");
+    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff '^M'");//^M
     process.exit();
 });
 
@@ -67,12 +78,12 @@ bot.on('message', message => {
 //Usuario nuevo en el servidor
 bot.on("guildMemberAdd", guildMemberAdd => {
     channel['bienvenida'].sendMessage(guildMemberAdd + " se ha unido al servidor! :upside_down:");
-    console.log(guildMemberAdd.name + " se ha unido al servidor!");
+    console.log(guildMemberAdd.user.username + " se ha unido al servidor! :)");
 });
 
 bot.on("guildMemberRemove", guildMemberRemove => {
-    channel['bienvenida'].sendMessage(guildMemberRemove + " se ha ido del servidor! :(");
-    console.log(guildMemberRemove.name + " se ha ido del servidor!");
+    channel['bienvenida'].sendMessage(guildMemberRemove + " se ha ido del servidor! :frowning2: ");
+    console.log(guildMemberRemove.user.username + " se ha ido del servidor! :(");
 });
 
 bot.login(config['token']);

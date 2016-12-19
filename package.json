@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "./Main.js"
+    "start": "node ./Main.js"
   },
   "dependencies": {
     "discord.js": "^10.0.1",
