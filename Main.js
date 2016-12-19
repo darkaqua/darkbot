@@ -10,7 +10,7 @@ const createHandler = require('github-webhook-handler');
 
 const bot = new Discord.Client();
 const commands = require("./Commands");
-const config = JSON.parse(fs.readFileSync("./config.json"));
+const config = JSON.parse(fs.readFileSync("../config.json"));
 const handler = createHandler({ path: '/webhook', secret: config['handlerHash'] });
 
 const port = process.argv[2] ? 7778 : 7777;
