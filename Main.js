@@ -15,6 +15,7 @@ const handler = createHandler({ path: '/webhook', secret: config['handlerHash'] 
 
 const port = process.argv[2] ? process.argv[2] : 7777;
 let lastVersion = process.argv[3];
+const currentVersion = process.argv[4] ? process.argv[4] : "0.1";
 
 try {
     child_process.exec("screen -X -S darkbot_" + lastVersion + " quit");
@@ -33,7 +34,7 @@ let channel = [];
 
 bot.on('ready', () => {
     console.log('Here we go! ❤');
-    bot.user.setGame("versión " + lastVersion + " ❤");
+    bot.user.setGame("versión " + currentVersion + " ❤");
     channel['bienvenida'] = bot.channels.find("name", "bienvenida");
 });
 
@@ -52,7 +53,7 @@ handler.on("release", (event) => {
     } catch (ignored) {}
     child_process.execSync("screen -dmS darkbot_" + tagName + "");
     child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff 'node Main.js'");
-    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff ' " + ((port == 7777) ? "7778" : "7777") + " " + lastVersion + " '");
+    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff ' " + ((port == 7777) ? "7778" : "7777") + " " + lastVersion + " " + tagName + " '");
     child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff '^M'");//^M
     process.exit();
 });
