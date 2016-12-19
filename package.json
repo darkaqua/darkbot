@@ -1,9 +1,9 @@
 {
-  "name": "discordjs",
-  "version": "0.0.0",
+  "name": "darkbot",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node ./Main.js"
+    "start": "./Main.js"
   },
   "dependencies": {
     "discord.js": "^10.0.1",
