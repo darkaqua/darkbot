@@ -22,6 +22,13 @@ http.createServer(function (req, res) {
     });
 }).listen(port);
 
+let channel = [];
+
+bot.on('ready', () => {
+    console.log('Here we go! ❤');
+    channel['bienvenida'] = bot.channels.find("name", "bienvenida");
+});
+
 handler.on("error", (err) => {
     console.error('Error:', err.message)
 });
@@ -37,10 +44,6 @@ handler.on("release", (event) => {
     } catch (ignored) {}
     child_process.spawn("node", ["Main.js", (port == 7777) ? 7778 : 7777], { detached: true });
     process.exit();
-});
-
-bot.on('ready', () => {
-    console.log('Here we go! ❤');
 });
 
 bot.on('message', message => {
@@ -63,9 +66,13 @@ bot.on('message', message => {
 
 //Usuario nuevo en el servidor
 bot.on("guildMemberAdd", guildMemberAdd => {
-    const channel = bot.channels.find("name", "bienvenida");
-    channel.sendMessage(guildMemberAdd + " se ha unido al servidor!");
+    channel['bienvenida'].sendMessage(guildMemberAdd + " se ha unido al servidor! :upside_down:");
     console.log(guildMemberAdd.name + " se ha unido al servidor!");
+});
+
+bot.on("guildMemberRemove", guildMemberRemove => {
+    channel['bienvenida'].sendMessage(guildMemberRemove + " se ha ido del servidor! :(");
+    console.log(guildMemberRemove.name + " se ha ido del servidor!");
 });
 
 bot.login(config['token']);
