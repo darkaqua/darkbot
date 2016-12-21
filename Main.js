@@ -49,14 +49,20 @@ handler.on("error", (err) => {
 
 handler.on("release", (event) => {
     const newVersion = event.payload.release["tag_name"];
+    //Clone from github
     child_process.execSync("git clone https://github.com/darkaqua/darkbot " + __dirname + "/../" + newVersion);
     process.chdir("../" + newVersion);
+    //Install dependencies
     try {
         child_process.execSync("npm install");
     } catch (ignored) {}
     console.log("Installed dependencies (npm).");
+    //stdio files (log files)
+    const outs = fs.openSync("out.log", "a");
+    const errs = fs.openSync("out.log", "a");
+    //Spawn the process
     const newPort = (port == 7777) ? 7778 : 7777;
-    child_process.spawn("node", ["Main.js", newPort, newVersion, currentVersion], { detached: true });
+    child_process.spawn("node", ["Main.js", newPort, newVersion, currentVersion], { detached: true, stdio: ["ignore", outs, errs] });
     console.log("New version spawned.");
     process.exit();
 });
