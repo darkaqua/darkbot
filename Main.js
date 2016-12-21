@@ -2,6 +2,8 @@
  * Created by Pablo on 17/12/2016.
  */
 
+//Usage: node Main.js port version [last_version]
+
 const fs = require('fs');
 const http = require('http');
 const Discord = require('discord.js');
@@ -14,12 +16,8 @@ const config = JSON.parse(fs.readFileSync("../config.json"));
 const handler = createHandler({ path: '/webhook', secret: config['handlerHash'] });
 
 const port = process.argv[2] ? process.argv[2] : 7777;
-let lastVersion = process.argv[3];
-const currentVersion = process.argv[4] ? process.argv[4] : "0.1";
-
-try {
-    child_process.exec("screen -X -S darkbot_" + lastVersion + " quit");
-} catch (ignored) {}
+const currentVersion = process.argv[3];
+const lastVersion = process.argv[4];
 
 http.createServer(function (req, res) {
     handler(req, res, function (err) {
@@ -45,18 +43,14 @@ handler.on("error", (err) => {
 });
 
 handler.on("release", (event) => {
-    let tagName = event.payload.release.tag_name;
-    process.chdir("..");
-    child_process.execSync("git clone https://github.com/darkaqua/darkbot");
-    child_process.execSync("mv darkbot " + tagName);
-    process.chdir(tagName);
+    const newVersion = event.payload.release["tag_name"];
+    child_process.execSync("git clone https://github.com/darkaqua/darkbot " + __dirname + "/../" + newVersion);
+    process.chdir("../" + newVersion);
     try {
         child_process.execSync("npm install");
     } catch (ignored) {}
-    child_process.execSync("screen -dmS darkbot_" + tagName + "");
-    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff 'node Main.js'");
-    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff ' " + ((port == 7777) ? "7778" : "7777") + " " + currentVersion + " " + tagName + " '");
-    child_process.execSync("screen -r darkbot_" + tagName + " -p 0 -X stuff '^M'");//^M
+    const newPort = (port == 7777) ? 7778 : 7777;
+    child_process.spawn("node", ["Main.js", newPort, newVersion, currentVersion], { detached: true });
     process.exit();
 });
 
@@ -64,12 +58,11 @@ bot.on('message', message => {
     // console.log(bot.permissions);//member.roles.findKey("name", "adm")
 
     if(message.content.startsWith("!")) {
-
-        const command = commands.list[message.content.split(" ")[0]];
+        const cmdstr = message.content.substring(0, message.content.indexOf(" "));
+        const command = commands.list[cmdstr];
         if(command && commands.hasPermission(command, message.member)) {
             command.exec(message);
         }
-
     } else if(!message.author.bot){
         if(message.mentions.users.findKey("id", bot.user.id) != null){
             message.reply(" lo siento, aún no puedo hacer nada..!");
@@ -90,3 +83,13 @@ bot.on("guildMemberRemove", guildMemberRemove => {
 });
 
 bot.login(config['token']);
+
+//Delete last version when this one is already running.
+if(lastVersion) {
+    try {
+        child_process.execSync("rm -rf ../" + lastVersion);
+        console.log("Last version deleted correctly.")
+    } catch(e) {
+        console.log("Error deleting last version: " + e)
+    }
+}
