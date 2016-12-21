@@ -19,6 +19,11 @@ const port = process.argv[2] ? process.argv[2] : 7777;
 const currentVersion = process.argv[3];
 const lastVersion = process.argv[4];
 
+if(!port || !currentVersion) {
+    console.log("Usage: node Main.js port version [last_version]");
+    process.exit();
+}
+
 http.createServer(function (req, res) {
     handler(req, res, function (err) {
         res.statusCode = 202;
@@ -31,8 +36,8 @@ let channel = [];
 bot.on('ready', () => {
     console.log('Here we go! ❤');
     console.log("-Port: " + port);
-    console.log("-Last versión: " + lastVersion);
     console.log("-Current versión: " + currentVersion);
+    if(lastVersion) console.log("-Last versión: " + lastVersion);
 
     bot.user.setGame("versión " + currentVersion + " ❤");
     channel['bienvenida'] = bot.channels.find("name", "bienvenida");
@@ -49,8 +54,10 @@ handler.on("release", (event) => {
     try {
         child_process.execSync("npm install");
     } catch (ignored) {}
+    console.log("Installed dependencies (npm).");
     const newPort = (port == 7777) ? 7778 : 7777;
     child_process.spawn("node", ["Main.js", newPort, newVersion, currentVersion], { detached: true });
+    console.log("New version spawned.");
     process.exit();
 });
 
