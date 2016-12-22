@@ -41,7 +41,15 @@ bot.on('ready', () => {
 
     bot.user.setGame("versión " + currentVersion + " ❤");
     channel['bienvenida'] = bot.channels.find("name", "bienvenida");
+
+    setInterval(pingDiscord, 30*1000);
 });
+
+function pingDiscord(){
+    bot.setStatus("online")
+        .then()
+        .catch(console.error);
+}
 
 handler.on("error", (err) => {
     console.error('Error:', err.message)
