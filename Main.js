@@ -46,7 +46,7 @@ bot.on('ready', () => {
 });
 
 function pingDiscord(){
-    bot.setStatus("online")
+    bot.user.setStatus("online")
         .then()
         .catch(console.error);
 }
