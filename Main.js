@@ -76,8 +76,8 @@ handler.on("release", (event) => {
     } catch (ignored) {}
     logger.message("Installed dependencies (npm).");
     //stdio files (log files)
-    const outs = fs.openSync("out.log", "a");
-    const errs = fs.openSync("out.log", "a");
+    const outs = fs.openSync("start.log", "a");
+    const errs = fs.openSync("start.log", "a");
     //Spawn the process
     const newPort = (port == 7777) ? 7778 : 7777;
     child_process.spawn("node", ["Main.js", newPort, newVersion, currentVersion], { detached: true, stdio: ["ignore", outs, errs] });
