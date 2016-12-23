@@ -19,6 +19,9 @@ const port = process.argv[2] ? process.argv[2] : 7777;
 const currentVersion = process.argv[3];
 const lastVersion = process.argv[4];
 
+const Logger = require("./Logger");
+const logger = new Logger("out.log");
+
 if(!port || !currentVersion) {
     console.log("Usage: node Main.js port version [last_version]");
     process.exit();
@@ -34,10 +37,10 @@ http.createServer(function (req, res) {
 let channel = [];
 
 bot.on('ready', () => {
-    console.log('Here we go! ❤');
-    console.log("-Port: " + port);
-    console.log("-Current versión: " + currentVersion);
-    if(lastVersion) console.log("-Last versión: " + lastVersion);
+    logger.message('Here we go! ❤');
+    logger.message("-Port: " + port);
+    logger.message("-Current versión: " + currentVersion);
+    if(lastVersion) logger.message("-Last versión: " + lastVersion);
 
     bot.user.setGame("versión " + currentVersion + " ❤");
     channel['bienvenida'] = bot.channels.find("name", "bienvenida");
@@ -48,11 +51,11 @@ bot.on('ready', () => {
 function pingDiscord(){
     bot.user.setStatus("online")
         .then()
-        .catch(console.error);
+        .catch(logger.error);
 }
 
 handler.on("error", (err) => {
-    console.error('Error:', err.message)
+    logger.error('Error:', err.message)
 });
 
 handler.on("release", (event) => {
@@ -64,14 +67,14 @@ handler.on("release", (event) => {
     try {
         child_process.execSync("npm install");
     } catch (ignored) {}
-    console.log("Installed dependencies (npm).");
+    logger.message("Installed dependencies (npm).");
     //stdio files (log files)
-    const outs = fs.openSync("out.log", "a");
-    const errs = fs.openSync("out.log", "a");
+    const outs = fs.openSync("start.log", "a");
+    const errs = fs.openSync("start.log", "a");
     //Spawn the process
     const newPort = (port == 7777) ? 7778 : 7777;
     child_process.spawn("node", ["Main.js", newPort, newVersion, currentVersion], { detached: true, stdio: ["ignore", outs, errs] });
-    console.log("New version spawned.");
+    logger.message("New version spawned.");
     process.exit();
 });
 
@@ -99,12 +102,12 @@ bot.on('message', message => {
 //Usuario nuevo en el servidor
 bot.on("guildMemberAdd", guildMemberAdd => {
     channel['bienvenida'].sendMessage(guildMemberAdd + " se ha unido al servidor! :upside_down:");
-    console.log(guildMemberAdd.user.username + " se ha unido al servidor! :)");
+    logger.message(guildMemberAdd.user.username + " se ha unido al servidor! :)");
 });
 
 bot.on("guildMemberRemove", guildMemberRemove => {
     channel['bienvenida'].sendMessage(guildMemberRemove + " se ha ido del servidor! :frowning2: ");
-    console.log(guildMemberRemove.user.username + " se ha ido del servidor! :(");
+    logger.message(guildMemberRemove.user.username + " se ha ido del servidor! :(");
 });
 
 bot.login(config['token']);
@@ -113,8 +116,8 @@ bot.login(config['token']);
 if(lastVersion) {
     try {
         child_process.execSync("rm -rf ../" + lastVersion);
-        console.log("Last version deleted correctly.")
+        logger.message("Last version deleted correctly.")
     } catch(e) {
-        console.log("Error deleting last version: " + e)
+        logger.error("Error deleting last version: " + e)
     }
 }
