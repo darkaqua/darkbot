@@ -24,6 +24,13 @@ if(!port || !currentVersion) {
     process.exit();
 }
 
+if(!lastVersion) {
+    const outs = fs.openSync("out.log", "a");
+    const errs = fs.openSync("out.log", "a");
+    process.stdout = outs;
+    process.stderr = errs;
+}
+
 http.createServer(function (req, res) {
     handler(req, res, function (err) {
         res.statusCode = 202;
