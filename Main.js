@@ -79,7 +79,11 @@ bot.on('message', message => {
     // console.log(bot.permissions);//member.roles.findKey("name", "adm")
 
     if(message.content.startsWith("!")) {
-        const cmdstr = message.content.substring(0, message.content.indexOf(" "));
+        const cmdstr = message.content.substring(0,
+            message.content.indexOf(" ") > -1 ?
+                message.content.indexOf(" ") :
+                message.content.length
+        );
         const command = commands.list[cmdstr];
         if(command && commands.hasPermission(command, message.member)) {
             command.exec(message);
