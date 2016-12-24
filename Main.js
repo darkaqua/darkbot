@@ -11,7 +11,7 @@ const child_process = require("child_process");
 const createHandler = require('github-webhook-handler');
 
 const bot = new Discord.Client();
-const commands = require("./Commands");
+
 const config = JSON.parse(fs.readFileSync("../config.json"));
 const handler = createHandler({ path: '/webhook', secret: config['handlerHash'] });
 
@@ -21,6 +21,10 @@ const lastVersion = process.argv[4];
 
 const Logger = require("./Logger");
 const logger = new Logger("out.log");
+
+module.exports.currentVersion = currentVersion;
+
+const commands = require("./Commands");
 
 if(!port || !currentVersion) {
     console.log("Usage: node Main.js port version [last_version]");
