@@ -19,16 +19,16 @@ const commands = {
                 message.reply("Ayudame a mejorar: https://github.com/darkaqua/darkbot");
             }
         },
-        "!help": {
+        "!help": { // <= acá hice cualquier cosa jaja, ya lo fixe
             whatdo: "Es el comando que estas usando ahora.",
             roles: ["@everyone"],
             exec: (message) => {
 
                 var full_help = "";
-                for (var key in commands.whatdo) {
-                    full_help += key + " - " + commands.whatdo[key].info + "\n";
+                for (var key in commands.list) {
+                    full_help += key + " - " + commands.list[key].whatdo + "\n";
                 }
-
+                
                 message.channel.sendMessage(full_help);
             }
         }
