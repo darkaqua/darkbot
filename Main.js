@@ -53,6 +53,9 @@ bot.on('ready', () => {
 });
 
 function pingDiscord(){
+    bot.user.setGame(currentVersion)
+        .then()
+        .catch(logger.error);
     bot.user.setStatus("online")
         .then()
         .catch(logger.error);
@@ -64,6 +67,14 @@ handler.on("error", (err) => {
 
 handler.on("release", (event) => {
     const newVersion = event.payload.release["tag_name"];
+
+    bot.user.setGame("actualizando a " + newVersion + "...")
+        .then()
+        .catch(logger.error);
+    bot.user.setStatus("idle")
+        .then()
+        .catch(logger.error);
+
     //Clone from github
     child_process.execSync("git clone https://github.com/darkaqua/darkbot " + __dirname + "/../" + newVersion);
     process.chdir("../" + newVersion);
