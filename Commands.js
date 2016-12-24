@@ -28,7 +28,7 @@ const commands = {
                 message.reply("Ayudame a mejorar: https://github.com/darkaqua/darkbot");
             }
         },
-        "!help": {
+        "!help": { // <= acá hice cualquier cosa jaja, ya lo fixe
             whatdo: "Es el comando que estas usando ahora.",
             roles: ["@everyone"],
             exec: (message) => {
@@ -37,9 +37,9 @@ const commands = {
                 for (var key in commands.list) {
                     full_help += key + " - " + commands.list[key].whatdo + "\n";
                 }
-
                 //No poner sendCode porque sino no hay mencion al usuario.
                 message.reply(" esta es la información de los comandos... ```\n" + full_help.substring(0, full_help.length - 2) + " ```");
+
             }
         }
     },
