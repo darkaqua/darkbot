@@ -53,7 +53,7 @@ bot.on('ready', () => {
 });
 
 function pingDiscord(){
-    bot.user.setGame(currentVersion)
+    bot.user.setGame("versión " + currentVersion + " ❤")
         .then()
         .catch(logger.error);
     bot.user.setStatus("online")
