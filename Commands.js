@@ -34,11 +34,20 @@ const commands = {
             exec: (message) => {
 
                 var full_help = "";
+                var extrahelp = "";
+
                 for (var key in commands.list) {
-                    full_help += key + " - " + commands.list[key].whatdo + "\n";
+                    extrahelp = "";
+
+	                for (var key2 in commands.list[key].roles) {
+	                    extrahelp += commands.list[key].roles[key2];
+	                }
+
+	                full_help += key + " - " + commands.list[key].whatdo + " - " + extrahelp +"\n";
                 }
+                
                 //No poner sendCode porque sino no hay mencion al usuario.
-                message.reply(" esta es la información de los comandos... ```\n" + full_help.substring(0, full_help.length - 2) + " ```");
+                message.reply(" esta es la información de los comandos... ```\n" + full_help.substring(0, full_help.length - 1) + " ```");
 
             }
         }
