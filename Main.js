@@ -117,6 +117,10 @@ bot.on('message', message => {
 //Usuario nuevo en el servidor
 bot.on("guildMemberAdd", guildMemberAdd => {
     channel['bienvenida'].sendMessage(guildMemberAdd + " se ha unido al servidor! :upside_down:");
+    var userNumber = bot.users.array().length - 1;//No se porque motivo cuenta uno más de la cuenta...
+    if((userNumber%100) == 0){
+        channel['bienvenida'].sendMessage(guildMemberAdd + ", eres el usuario " + userNumber + "! :stuck_out_tongue_winking_eye: ");
+    }
     logger.message(guildMemberAdd.user.username + " se ha unido al servidor! :)");
 });
 
