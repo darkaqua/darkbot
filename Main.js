@@ -93,6 +93,23 @@ handler.on("release", (event) => {
     process.exit();
 });
 
+const reactionChannels = ["darkaqua_updates", "voidpixel_updates", "jvm", "net", "c_cpp", "web"];
+const reactionEmojis = [["darkaqua"], ["voidpixel", "xamarin"], ["java", "kt"], ["win", "net"], ["C_"], ["js", "nodejs"]];
+
+Array.prototype.contains = function(obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bot.on('emojiCreate', emojiCreate => {
+   console.log(emojiCreate);
+});
+
 bot.on('message', message => {
     // console.log(bot.permissions);//member.roles.findKey("name", "adm")
 
@@ -110,6 +127,14 @@ bot.on('message', message => {
         if(message.mentions.users.findKey("id", bot.user.id) != null){
             message.reply(" lo siento, aún no puedo hacer nada..!");
             message.reply("Ayudame a mejorar con tu aportación... https://github.com/darkaqua/darkbot");
+        }
+    }
+
+    if(reactionChannels.contains(message.channel.name)){
+        var pos = reactionChannels.indexOf(message.channel.name);
+        var emojis = reactionEmojis[pos];
+        for (var i = 0; i < emojis.length; i++){
+            message.react(bot.emojis.find("name", emojis[i])).then().catch(console.error);
         }
     }
 });
