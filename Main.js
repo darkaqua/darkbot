@@ -93,8 +93,10 @@ handler.on("release", (event) => {
     process.exit();
 });
 
-const reactionChannels = ["darkaqua_updates", "voidpixel_updates", "jvm", "net", "c_cpp", "web"];
-const reactionEmojis = [["darkaqua"], ["voidpixel", "xamarin"], ["java", "kt"], ["win", "net"], ["C_"], ["js", "nodejs"]];
+const reactions = {
+    darkbot_updates: ["darkaqua", "js", "nodejs"],
+    voidpixel_updates: ["voidpixel", "xamarin", "win"]
+}
 
 Array.prototype.contains = function(obj) {
     var i = this.length;
@@ -130,13 +132,12 @@ bot.on('message', message => {
         }
     }
 
-    if(reactionChannels.contains(message.channel.name)){
-        var pos = reactionChannels.indexOf(message.channel.name);
-        var emojis = reactionEmojis[pos];
-        for (var i = 0; i < emojis.length; i++){
-            message.react(bot.emojis.find("name", emojis[i])).then().catch(console.error);
-        }
+    if(reactions.hasOwnProperty(message.channel.name)) {
+        reactions[message.channel.name].forEach((emoji) => {
+            message.react(bot.emojis.find("name", emoji)).then().catch(console.error);
+        });
     }
+
 });
 
 //Usuario nuevo en el servidor
