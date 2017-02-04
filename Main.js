@@ -95,18 +95,9 @@ handler.on("release", (event) => {
 
 const reactions = {
     darkbot_updates: ["darkaqua", "js", "nodejs"],
-    voidpixel_updates: ["voidpixel", "xamarin", "win"]
-}
-
-Array.prototype.contains = function(obj) {
-    var i = this.length;
-    while (i--) {
-        if (this[i] === obj) {
-            return true;
-        }
-    }
-    return false;
-}
+    voidpixel_updates: ["voidpixel", "xamarin", "win"],
+    shop_top: ["upvote", "downvote"]
+};
 
 bot.on('emojiCreate', emojiCreate => {
    console.log(emojiCreate);
@@ -143,7 +134,7 @@ bot.on('message', message => {
 //Usuario nuevo en el servidor
 bot.on("guildMemberAdd", guildMemberAdd => {
     channel['bienvenida'].sendMessage(guildMemberAdd + " se ha unido al servidor! :upside_down:");
-    var userNumber = bot.users.array().length - 1;//No se porque motivo cuenta uno más de la cuenta...
+    let userNumber = bot.users.array().length - 1;//No se porque motivo cuenta uno más de la cuenta...
     if((userNumber%100) == 0){
         channel['bienvenida'].sendMessage(guildMemberAdd + ", eres el usuario " + userNumber + "! :stuck_out_tongue_winking_eye: ");
     }
