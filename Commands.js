@@ -4,6 +4,7 @@
  * Modified by Pablo on 24/12/2016
  */
 const main = require("./Main");
+const embedFactory = require("./embedFactory.js");
 
 const commands = {
     list: {
@@ -28,6 +29,22 @@ const commands = {
                 message.reply("Ayudame a mejorar: https://github.com/darkaqua/darkbot");
             }
         },
+        "!quote": {
+            whatdo: "Citar un mensaje del canal.",
+            roles: ["@everyone"],
+            exec: (message) => {
+                let id = message.content.split(" ")[1];
+                if(id) {
+                    message.channel.fetchMessage(id).then(msg => {
+                                message.channel.sendEmbed(embedFactory.createEmbed(msg));
+                            }).catch(err => {
+                                message.reply("An error ocurred.")
+                                        .then(msg => msg.delete(5000));
+                            })
+                            message.delete();
+                }
+            }
+        },
         "!help": { // <= acá hice cualquier cosa jaja, ya lo fixe
             whatdo: "Es el comando que estas usando ahora.",
             roles: ["@everyone"],
@@ -45,7 +62,7 @@ const commands = {
 
 	                full_help += key + " - " + commands.list[key].whatdo + " - " + extrahelp +"\n";
                 }
-                
+
                 //No poner sendCode porque sino no hay mencion al usuario.
                 message.reply(" esta es la información de los comandos... ```\n" + full_help.substring(0, full_help.length - 1) + " ```");
 
