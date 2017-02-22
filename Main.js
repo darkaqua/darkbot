@@ -133,17 +133,17 @@ bot.on('message', message => {
 
 //Usuario nuevo en el servidor
 bot.on("guildMemberAdd", join => {
-    join.guild.channels.get('244102569729720321').sendMessage(join + " se ha unido al servidor! :upside_down:");
+    channel['bienvenida'].sendMessage(join + " se ha unido al servidor! :upside_down:");
     let userNumber = join.guild.memberCount;
     if((userNumber%100) == 0){
-        join.guild.channels.get('244102569729720321').sendMessage(join + ", eres el usuario " + userNumber + "! :stuck_out_tongue_winking_eye: ");
+        channel['bienvenida'].sendMessage(join + ", eres el usuario " + userNumber + "! :stuck_out_tongue_winking_eye: ");
       }
     logger.message(join.user.username + " se ha unido al servidor! :)");
 });
 
 //Usuario deja el servidor
 bot.on("guildMemberRemove", leave => {
-    leave.guild.channels.get('244102569729720321').sendMessage(leave + " se ha ido del servidor! :frowning2: ");
+    channel['bienvenida'].sendMessage(leave + " se ha ido del servidor! :frowning2: ");
     logger.message(leave.user.username + " se ha ido del servidor! :(");
 });
 
