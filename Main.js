@@ -106,20 +106,18 @@ bot.on('emojiCreate', emojiCreate => {
 bot.on('message', message => {
     // console.log(bot.permissions);//member.roles.findKey("name", "adm")
 
-    if(message.content.startsWith("!")) {
-        const cmdstr = message.content.substring(0,
-            message.content.indexOf(" ") > -1 ?
-                message.content.indexOf(" ") :
-                message.content.length
-        );
-        const command = commands.list[cmdstr];
-        if(command && commands.hasPermission(command, message.member)) {
-            command.exec(message);
-        }
-    } else if(!message.author.bot){
-        if(message.mentions.users.findKey("id", bot.user.id) != null){
-            message.reply(" lo siento, aún no puedo hacer nada..!");
-            message.reply("Ayudame a mejorar con tu aportación... https://github.com/darkaqua/darkbot");
+    if(!message.guild) {
+        message.channel.sendMessage("No nos deberian ver a solas... Hablame por una sala del servidor.");
+    } else if(message.content.startsWith("!")) {
+        if(message.guild) {
+            const cmdstr = message.content.substring(0,
+                message.content.indexOf(" ") > -1 ?
+                    message.content.indexOf(" ") :
+                    message.content.length);
+            const command = commands.list[cmdstr];
+            if(command && commands.hasPermission(command, message.member)) {
+                command.exec(message);
+            }
         }
     }
 

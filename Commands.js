@@ -12,12 +12,13 @@ const commands = {
             whatdo: "Muestra la versión del bot.",
             roles: ["@everyone"],
             exec: (message) => {
-                message.reply(" me encuentro en la versión " + main.currentVersion + " :blush:");
+                message.author.sendMessage(" me encuentro en la versión " + main.currentVersion + " :blush:");
+                message.delete();
             }
         },
         "!temp": {
             whatdo: "Borra el mensaje del comando pasados 5 segundos.",
-            roles: ["Adminsitrador"],
+            roles: ["[admin]"],
             exec: (message) => {
                 message.delete(5000);
             }
@@ -26,7 +27,8 @@ const commands = {
             whatdo: "Muestra el link de la repo del bot.",
             roles: ["@everyone"],
             exec: (message) => {
-                message.reply("Ayudame a mejorar: https://github.com/darkaqua/darkbot");
+                message.author.sendMessage("Ayudame a mejorar: https://github.com/darkaqua/darkbot");
+                message.delete();
             }
         },
         "!quote": {
@@ -54,6 +56,9 @@ const commands = {
                 var extrahelp = "";
 
                 for (var key in commands.list) {
+                    if(!commands.hasPermission(commands.list[key], message.member))
+                        continue;
+
                     extrahelp = "";
 
 	                for (var key2 in commands.list[key].roles) {
@@ -64,7 +69,8 @@ const commands = {
                 }
 
                 //No poner sendCode porque sino no hay mencion al usuario.
-                message.reply(" esta es la información de los comandos... ```\n" + full_help.substring(0, full_help.length - 1) + " ```");
+                message.author.sendMessage("Esta es la información de los comandos... ```\n" + full_help.substring(0, full_help.length - 1) + " ```");
+                message.delete();
 
             }
         }
