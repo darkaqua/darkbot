@@ -14,7 +14,8 @@ const commands = {
             whatdo: "Muestra la versión del bot.",
             roles: ["@everyone"],
             exec: (message, params) => {
-                message.reply(" me encuentro en la versión " + params.version + " :blush:");
+                message.author.sendMessage(" me encuentro en la versión " + params.version + " :blush:");
+                message.delete();
             }
         },
         "!temp": {
@@ -36,16 +37,20 @@ const commands = {
             whatdo: "Citar un mensaje del canal.",
             roles: ["@everyone"],
             exec: (message) => {
-                let id = message.content.split(" ")[1];
-                if(id) {
-                    message.channel.fetchMessage(id).then(msg => {
+                let args = message.content.split(" ");
+                if(!args[1]) {
+                    message.author.sendMessage("Uso: !quote [id del mensaje] (id del canal) --- La id del canal se puede omitir si el mensaje original esta en el mismo canal.")
+                } else {
+                    (() => {
+                        return args[2] ? message.guild.channels.get(args[2]) : message.channel;
+                    })().fetchMessage(args[1]).then(msg => {
                         message.channel.sendEmbed(embedFactory.createEmbed(msg));
-                    }).catch(err => {
-                        message.reply("An error ocurred.")
-                                .then(msg => msg.delete(5000));
-                    })
-                    message.delete();
+                    }).catch((err) => {
+                        console.log(err);
+                        message.author.sendMessage("Ha ocurrido un error, igual el mensaje no existe.");
+                    });
                 }
+                message.delete();
             }
         },
         "!status": {
@@ -56,8 +61,7 @@ const commands = {
                 if(statuses.includes(args[1])) {
                     params.botuser.setStatus(args[1]);
                 } else {
-                    message.reply("El estado debe ser `online`, `idle`, `invisible` o `dnd` (do not disturb).")
-                        .then(msg => msg.delete(5000));
+                    message.author.sendMessage("El estado debe ser `online`, `idle`, `invisible` o `dnd` (do not disturb).");
                 }
                 message.delete();
             }
