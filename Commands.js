@@ -49,7 +49,7 @@ const commands = {
                             message.channel.sendEmbed(embedFactory.createEmbed(msg));
                         }).catch((err) => {
                             console.log(err);
-                            message.author.sendMessage("Ha ocurrido un error, igual el mensaje no existe.");
+                            message.author.sendMessage("Ha ocurrido un error, quizá el mensaje no existe.");
                         });
                     } else {
                         message.author.sendMessage("El canal especificado no existe.");
