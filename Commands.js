@@ -5,6 +5,7 @@
  */
 const main = require("./Main");
 const embedFactory = require("./embedFactory.js");
+const Discord = require("discord.js");
 
 const commands = {
     list: {
@@ -50,26 +51,20 @@ const commands = {
         "!help": { // <= acá hice cualquier cosa jaja, ya lo fixe
             whatdo: "Es el comando que estas usando ahora.",
             roles: ["@everyone"],
-            exec: (message) => {
+            exec: (message, params) => {
 
-                var full_help = "";
-                var extrahelp = "";
+                let embed = new Discord.RichEmbed();
+                embed.setAuthor("Darkaqua", params.botuser.displayAvatarURL);
+                embed.setTitle("Comandos disponibles");
 
                 for (var key in commands.list) {
                     if(!commands.hasPermission(commands.list[key], message.member))
                         continue;
-
-                    extrahelp = "";
-
-	                for (var key2 in commands.list[key].roles) {
-	                    extrahelp += commands.list[key].roles[key2];
-	                }
-
-	                full_help += key + " - " + commands.list[key].whatdo + " - " + extrahelp +"\n";
+                    embed.addField(key, commands.list[key].whatdo + " - " + commands.list[key].roles.join(", "));
                 }
-
+                
                 //No poner sendCode porque sino no hay mencion al usuario.
-                message.author.sendMessage("Esta es la información de los comandos... ```\n" + full_help.substring(0, full_help.length - 1) + " ```");
+                message.author.sendEmbed(embed);
                 message.delete();
 
             }
