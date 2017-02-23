@@ -104,7 +104,7 @@ bot.on('emojiCreate', emojiCreate => {
 bot.on('message', message => {
     // console.log(bot.permissions);//member.roles.findKey("name", "adm")
 
-    if(!message.guild) {
+    if(!message.guild && message.author.id != bot.user.id) {
         message.channel.sendMessage("No nos deberian ver a solas... Hablame por una sala del servidor.");
     } else if(message.content.startsWith("!")) {
         if(message.guild) {
@@ -114,7 +114,8 @@ bot.on('message', message => {
                     message.content.length);
             const command = commands.list[cmdstr];
             if(command && commands.hasPermission(command, message.member)) {
-                command.exec(message);
+                let params = { botuser: bot.user, version: currentVersion };
+                command.exec(message, params);
             }
         }
     }

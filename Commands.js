@@ -70,13 +70,14 @@ const commands = {
                 let embed = new Discord.RichEmbed();
                 embed.setAuthor("Darkaqua", params.botuser.displayAvatarURL);
                 embed.setTitle("Comandos disponibles");
+                embed.setColor("#2691b3")
 
                 for (var key in commands.list) {
                     if(!commands.hasPermission(commands.list[key], message.member))
                         continue;
                     embed.addField(key, commands.list[key].whatdo + " - " + commands.list[key].roles.join(", "));
                 }
-                
+
                 //No poner sendCode porque sino no hay mencion al usuario.
                 message.author.sendEmbed(embed);
                 message.delete();
