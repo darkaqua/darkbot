@@ -4,6 +4,7 @@
  * Modified by Pablo on 24/12/2016
  */
 const embedFactory = require("./embedFactory.js");
+const Discord = require("discord.js");
 
 const statuses = ["online", "idle", "invisible", "dnd"];
 
@@ -18,7 +19,7 @@ const commands = {
         },
         "!temp": {
             whatdo: "Borra el mensaje del comando pasados 5 segundos.",
-            roles: ["Adminsitrador"],
+            roles: ["[admin]"],
             exec: (message) => {
                 message.delete(5000);
             }
@@ -27,7 +28,8 @@ const commands = {
             whatdo: "Muestra el link de la repo del bot.",
             roles: ["@everyone"],
             exec: (message) => {
-                message.reply("Ayudame a mejorar: https://github.com/darkaqua/darkbot");
+                message.author.sendMessage("Ayudame a mejorar: https://github.com/darkaqua/darkbot");
+                message.delete();
             }
         },
         "!quote": {
@@ -63,23 +65,21 @@ const commands = {
         "!help": { // <= acá hice cualquier cosa jaja, ya lo fixe
             whatdo: "Es el comando que estas usando ahora.",
             roles: ["@everyone"],
-            exec: (message) => {
+            exec: (message, params) => {
 
-                var full_help = "";
-                var extrahelp = "";
+                let embed = new Discord.RichEmbed();
+                embed.setAuthor("Darkaqua", params.botuser.displayAvatarURL);
+                embed.setTitle("Comandos disponibles");
 
                 for (var key in commands.list) {
-                    extrahelp = "";
-
-	                for (var key2 in commands.list[key].roles) {
-	                    extrahelp += commands.list[key].roles[key2];
-	                }
-
-	                full_help += key + " - " + commands.list[key].whatdo + " - " + extrahelp +"\n";
+                    if(!commands.hasPermission(commands.list[key], message.member))
+                        continue;
+                    embed.addField(key, commands.list[key].whatdo + " - " + commands.list[key].roles.join(", "));
                 }
-
+                
                 //No poner sendCode porque sino no hay mencion al usuario.
-                message.reply(" esta es la información de los comandos... ```\n" + full_help.substring(0, full_help.length - 1) + " ```");
+                message.author.sendEmbed(embed);
+                message.delete();
 
             }
         }
