@@ -6,6 +6,9 @@ exports.createEmbed = function(message) {
         "author": {
             "name": message.author.username,
             "icon_url": message.author.displayAvatarURL
+        },
+        "footer": {
+            "text": "#" + message.channel.name
         }
     };
     return embed;
