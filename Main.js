@@ -22,8 +22,6 @@ const lastVersion = process.argv[4];
 const Logger = require("./Logger");
 const logger = new Logger("out.log");
 
-module.exports.currentVersion = currentVersion;
-
 const commands = require("./Commands");
 
 if(!port || !currentVersion) {
@@ -106,20 +104,18 @@ bot.on('emojiCreate', emojiCreate => {
 bot.on('message', message => {
     // console.log(bot.permissions);//member.roles.findKey("name", "adm")
 
-    if(message.content.startsWith("!")) {
-        const cmdstr = message.content.substring(0,
-            message.content.indexOf(" ") > -1 ?
-                message.content.indexOf(" ") :
-                message.content.length
-        );
-        const command = commands.list[cmdstr];
-        if(command && commands.hasPermission(command, message.member)) {
-            command.exec(message);
-        }
-    } else if(!message.author.bot){
-        if(message.mentions.users.findKey("id", bot.user.id) != null){
-            message.reply(" lo siento, aún no puedo hacer nada..!");
-            message.reply("Ayudame a mejorar con tu aportación... https://github.com/darkaqua/darkbot");
+    if(!message.guild) {
+        message.channel.sendMessage("No nos deberian ver a solas... Hablame por una sala del servidor.");
+    } else if(message.content.startsWith("!")) {
+        if(message.guild) {
+            const cmdstr = message.content.substring(0,
+                message.content.indexOf(" ") > -1 ?
+                    message.content.indexOf(" ") :
+                    message.content.length);
+            const command = commands.list[cmdstr];
+            if(command && commands.hasPermission(command, message.member)) {
+                command.exec(message);
+            }
         }
     }
 
@@ -132,18 +128,19 @@ bot.on('message', message => {
 });
 
 //Usuario nuevo en el servidor
-bot.on("guildMemberAdd", guildMemberAdd => {
-    channel['bienvenida'].sendMessage(guildMemberAdd + " se ha unido al servidor! :upside_down:");
-    let userNumber = bot.users.array().length - 1;//No se porque motivo cuenta uno más de la cuenta...
+bot.on("guildMemberAdd", join => {
+    channel['bienvenida'].sendMessage(join + " se ha unido al servidor! :upside_down:");
+    let userNumber = join.guild.memberCount;
     if((userNumber%100) == 0){
-        channel['bienvenida'].sendMessage(guildMemberAdd + ", eres el usuario " + userNumber + "! :stuck_out_tongue_winking_eye: ");
-    }
-    logger.message(guildMemberAdd.user.username + " se ha unido al servidor! :)");
+        channel['bienvenida'].sendMessage(join + ", eres el usuario " + userNumber + "! :stuck_out_tongue_winking_eye: ");
+      }
+    logger.message(join.user.username + " se ha unido al servidor! :)");
 });
 
-bot.on("guildMemberRemove", guildMemberRemove => {
-    channel['bienvenida'].sendMessage(guildMemberRemove + " se ha ido del servidor! :frowning2: ");
-    logger.message(guildMemberRemove.user.username + " se ha ido del servidor! :(");
+//Usuario deja el servidor
+bot.on("guildMemberRemove", leave => {
+    channel['bienvenida'].sendMessage(leave + " se ha ido del servidor! :frowning2: ");
+    logger.message(leave.user.username + " se ha ido del servidor! :(");
 });
 
 bot.login(config['token']);
