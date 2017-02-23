@@ -3,18 +3,18 @@
  * Modified by MagicInventor (http://magicinventor.xyz) on 20/12/2016
  * Modified by Pablo on 24/12/2016
  */
-const main = require("./Main");
 const embedFactory = require("./embedFactory.js");
 const Discord = require("discord.js");
+
+const statuses = ["online", "idle", "invisible", "dnd"];
 
 const commands = {
     list: {
         "!version" :{
             whatdo: "Muestra la versión del bot.",
             roles: ["@everyone"],
-            exec: (message) => {
-                message.author.sendMessage(" me encuentro en la versión " + main.currentVersion + " :blush:");
-                message.delete();
+            exec: (message, params) => {
+                message.reply(" me encuentro en la versión " + params.version + " :blush:");
             }
         },
         "!temp": {
@@ -39,13 +39,27 @@ const commands = {
                 let id = message.content.split(" ")[1];
                 if(id) {
                     message.channel.fetchMessage(id).then(msg => {
-                                message.channel.sendEmbed(embedFactory.createEmbed(msg));
-                            }).catch(err => {
-                                message.reply("An error ocurred.")
-                                        .then(msg => msg.delete(5000));
-                            })
-                            message.delete();
+                        message.channel.sendEmbed(embedFactory.createEmbed(msg));
+                    }).catch(err => {
+                        message.reply("An error ocurred.")
+                                .then(msg => msg.delete(5000));
+                    })
+                    message.delete();
                 }
+            }
+        },
+        "!status": {
+            whatdo: "Cambiar el estado del bot.",
+            roles: ["[admin]"],
+            exec: (message, params) => {
+                let args = message.content.split(" ");
+                if(statuses.includes(args[1])) {
+                    params.botuser.setStatus(args[1]);
+                } else {
+                    message.reply("El estado debe ser `online`, `idle`, `invisible` o `dnd` (do not disturb).")
+                        .then(msg => msg.delete(5000));
+                }
+                message.delete();
             }
         },
         "!help": { // <= acá hice cualquier cosa jaja, ya lo fixe

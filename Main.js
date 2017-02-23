@@ -22,8 +22,6 @@ const lastVersion = process.argv[4];
 const Logger = require("./Logger");
 const logger = new Logger("out.log");
 
-module.exports.currentVersion = currentVersion;
-
 const commands = require("./Commands");
 
 if(!port || !currentVersion) {
@@ -130,18 +128,19 @@ bot.on('message', message => {
 });
 
 //Usuario nuevo en el servidor
-bot.on("guildMemberAdd", guildMemberAdd => {
-    channel['bienvenida'].sendMessage(guildMemberAdd + " se ha unido al servidor! :upside_down:");
-    let userNumber = bot.users.array().length - 1;//No se porque motivo cuenta uno más de la cuenta...
+bot.on("guildMemberAdd", join => {
+    channel['bienvenida'].sendMessage(join + " se ha unido al servidor! :upside_down:");
+    let userNumber = join.guild.memberCount;
     if((userNumber%100) == 0){
-        channel['bienvenida'].sendMessage(guildMemberAdd + ", eres el usuario " + userNumber + "! :stuck_out_tongue_winking_eye: ");
-    }
-    logger.message(guildMemberAdd.user.username + " se ha unido al servidor! :)");
+        channel['bienvenida'].sendMessage(join + ", eres el usuario " + userNumber + "! :stuck_out_tongue_winking_eye: ");
+      }
+    logger.message(join.user.username + " se ha unido al servidor! :)");
 });
 
-bot.on("guildMemberRemove", guildMemberRemove => {
-    channel['bienvenida'].sendMessage(guildMemberRemove + " se ha ido del servidor! :frowning2: ");
-    logger.message(guildMemberRemove.user.username + " se ha ido del servidor! :(");
+//Usuario deja el servidor
+bot.on("guildMemberRemove", leave => {
+    channel['bienvenida'].sendMessage(leave + " se ha ido del servidor! :frowning2: ");
+    logger.message(leave.user.username + " se ha ido del servidor! :(");
 });
 
 bot.login(config['token']);
