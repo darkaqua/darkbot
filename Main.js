@@ -22,8 +22,6 @@ const lastVersion = process.argv[4];
 const Logger = require("./Logger");
 const logger = new Logger("out.log");
 
-module.exports.currentVersion = currentVersion;
-
 const commands = require("./Commands");
 
 if(!port || !currentVersion) {
@@ -114,7 +112,8 @@ bot.on('message', message => {
         );
         const command = commands.list[cmdstr];
         if(command && commands.hasPermission(command, message.member)) {
-            command.exec(message);
+            let params = { botuser: bot.user, version: currentVersion };
+            command.exec(message, params);
         }
     } else if(!message.author.bot){
         if(message.mentions.users.findKey("id", bot.user.id) != null){
