@@ -65,6 +65,24 @@ handler.on("error", (err) => {
 
 handler.on("release", (event) => {
     const newVersion = event.payload.release["tag_name"];
+    //Embed con info de actualización
+    let embed = new Discord.RichEmbed({
+      "description": "De la versión " + currentVersion + " a la " + newVersion + "..."
+    });
+    embed.setTitle("Actualizando...");
+    embed.setColor("#2691b3");
+    embed.setURL(event.payload.release["html_url"]);
+    embed.addField(event.payload.release["name"], event.payload.release["body"]);
+    bot.channels.get('284563684712513536').sendEmbed(embed);
+    //Status del bot
+    bot.user.setGame("actualizando a " + newVersion + "...")
+        .then()
+        .catch(logger.error);
+    bot.user.setStatus("idle")
+        .then()
+        .catch(logger.error);
+
+});
 
     bot.user.setGame("actualizando a " + newVersion + "...")
         .then()
