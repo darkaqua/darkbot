@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const http = require('http');
+const https = require('https');
 const Discord = require('discord.js');
 const child_process = require("child_process");
 const createHandler = require('github-webhook-handler');
@@ -117,6 +118,39 @@ bot.on('message', message => {
                 let params = { botuser: bot.user, version: currentVersion };
                 command.exec(message, params);
             }
+        }
+    }
+
+    //Si se escribe en un mensaje git#56 (56 siendo el numero del pull request / issue que se menciona)
+    //el bot envia un embed con la info del pull/issue.
+    let pattern = /git#(\d+)/ig;
+    if(message.channel.id == "229295401507749888" && message.author.id != bot.user.id) {
+        while(match = pattern.exec(message.content)) {
+            let options = {
+                hostname: "api.github.com",
+                path: "/repos/darkaqua/darkbot/issues/" + match[1],
+                headers: { "User-Agent": "darkaqua-darkbot" }
+            };
+            let req = https.request(options, (res) => {
+                let data = "";
+                res.on("data", chunk => { data += chunk; });
+                res.on("end", () => {
+                    if(res.statusCode != 404) {
+                        let issue = JSON.parse(data);
+                        let type = issue["pull_request"] ? "Pull Request" : "Issue";
+                        let embed = new Discord.RichEmbed({ timestamp: issue["created_at"] });
+                        embed.setAuthor(issue["user"]["login"], issue["user"]["avatar_url"], issue["user"]["html_url"])
+                                .setTitle(`${type} #${issue["number"]} - ${issue["title"]}`)
+                                .setDescription(issue["body"] ? issue["body"] : "No description provided.")
+                                .setURL(issue["html_url"])
+                                .setColor(issue["pull_request"] ? "#eb6420" : "#009800")
+                                .setFooter(issue["state"]);
+                        message.channel.sendEmbed(embed);
+                    }
+                });
+            });
+            req.on("error", (err) => { logger.error('Request Error:' + err.message) });
+            req.end();
         }
     }
 
