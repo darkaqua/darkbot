@@ -73,7 +73,7 @@ handler.on("release", (event) => {
         //Envía un embed a #darkbot_project con la info de la actualización
         let embed = new Discord.RichEmbed();
         bot.channels.get('260156423315521536').sendMessage("Actualizando...");
-        embed.setTitle("v" + event.payload.release["tag_name"]);
+        embed.setTitle("v" + newVersion);
         embed.setColor("#2691b3");
         embed.setURL(event.payload.release["html_url"]);
         embed.addField(event.payload.release["name"], event.payload.release["body"]);
