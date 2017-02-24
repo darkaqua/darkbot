@@ -104,7 +104,6 @@ handler.on("release", (event) => {
     const newPort = (port == 7777) ? 7778 : 7777;
     child_process.spawn("node", ["Main.js", newPort, newVersion, currentVersion], { detached: true, stdio: ["ignore", outs, errs] });
     logger.message("New version spawned.");
-    bot.channels.get('260156423315521536').sendMessage("***Actualizado***");
     process.exit();
 });
 
@@ -171,4 +170,5 @@ if(lastVersion) {
     } catch(e) {
         logger.error("Error deleting last version: " + e)
     }
+    bot.channels.get('260156423315521536').sendMessage("***Actualizado***");
 }
