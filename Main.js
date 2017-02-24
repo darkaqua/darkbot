@@ -124,7 +124,7 @@ bot.on('message', message => {
     //Si se escribe en un mensaje git#56 (56 siendo el numero del pull request / issue que se menciona)
     //el bot envia un embed con la info del pull/issue.
     let pattern = /git#(\d+)/ig;
-    if(message.channel.id == "229295401507749888" && message.author.id != bot.user.id) {
+    if(message.channel.id == "260156423315521536" && message.author.id != bot.user.id) {
         while(match = pattern.exec(message.content)) {
             let options = {
                 hostname: "api.github.com",
