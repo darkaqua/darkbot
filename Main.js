@@ -65,28 +65,26 @@ handler.on("error", (err) => {
 
 handler.on("release", (event) => {
     const newVersion = event.payload.release["tag_name"];
-    //Embed con info de actualización
-    let embed = new Discord.RichEmbed({
-      "description": "De la versión " + currentVersion + " a la " + newVersion + "..."
-    });
-    embed.setTitle("Actualizando...");
-    embed.setColor("#2691b3");
-    embed.setURL(event.payload.release["html_url"]);
-    embed.addField(event.payload.release["name"], event.payload.release["body"]);
-    bot.channels.get('284563684712513536').sendEmbed(embed);
-    //Status del bot
-    bot.user.setGame("actualizando a " + newVersion + "...")
-        .then()
-        .catch(logger.error);
-    bot.user.setStatus("idle")
-        .then()
-        .catch(logger.error);
-
-});
 
     bot.user.setGame("actualizando a " + newVersion + "...")
         .then()
         .catch(logger.error);
+
+        //Envía un embed a #darkbot_project con la info de la actualización
+        let embed = new Discord.RichEmbed();
+        bot.channels.get('260156423315521536').sendMessage("Actualizando...");
+        embed.setTitle("v" + event.payload.release["tag_name"]);
+        embed.setColor("#2691b3");
+        embed.setURL(event.payload.release["html_url"]);
+        embed.addField(event.payload.release["name"], event.payload.release["body"]);
+        embed.setTimestamp(event.payload.release["published_at"]);
+        if(event.payload.release["prerelease"] === true){
+          embed.setFooter("pre-release");
+        }else {
+          embed.setFooter("release");
+        }
+        bot.channels.get('260156423315521536').sendEmbed(embed);
+
     bot.user.setStatus("idle")
         .then()
         .catch(logger.error);
@@ -106,6 +104,7 @@ handler.on("release", (event) => {
     const newPort = (port == 7777) ? 7778 : 7777;
     child_process.spawn("node", ["Main.js", newPort, newVersion, currentVersion], { detached: true, stdio: ["ignore", outs, errs] });
     logger.message("New version spawned.");
+    bot.channels.get('260156423315521536').sendMessage("***Actualizado***");
     process.exit();
 });
 
