@@ -40,8 +40,8 @@ if(!e.port || !e.currentVersion) {
     process.exit();
 }
 
-http.createServer(function (req, res) {
-    handler(req, res, function (err) {
+http.createServer((req, res) => {
+    handler(req, res, (err) => {
         res.statusCode = 202;
         res.end('no such location');
     });
