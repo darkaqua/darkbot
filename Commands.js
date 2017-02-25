@@ -3,6 +3,8 @@
  * Modified by MagicInventor (http://magicinventor.xyz) on 20/12/2016
  * Modified by Pablo on 24/12/2016
  */
+"use strict";
+
 const embedFactory = require("./embedFactory.js");
 const Discord = require("discord.js");
 
@@ -46,9 +48,8 @@ const commands = {
                     })();
                     if(chan) {
                         chan.fetchMessage(args[1]).then(msg => {
-                            message.channel.sendEmbed(embedFactory.createEmbed(msg));
+                            message.channel.sendEmbed(embedFactory.createEmbed(msg), `Citado por ${message.author}`);
                         }).catch((err) => {
-                            console.log(err);
                             message.author.sendMessage("Ha ocurrido un error, quizá el mensaje no existe.");
                         });
                     } else {
@@ -68,6 +69,16 @@ const commands = {
                 } else {
                     message.author.sendMessage("El estado debe ser `online`, `idle`, `invisible` o `dnd` (do not disturb).");
                 }
+                message.delete();
+            }
+        },
+        "!date": {
+            whatdo: "Obtener en que fecha estamos.",
+            roles: ["@everyone"],
+            exec: (message, params) => {
+                let date = new Date();
+
+                message.author.sendMessage("La fecha es `" + date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "` en este servidor.");
                 message.delete();
             }
         },

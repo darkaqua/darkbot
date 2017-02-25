@@ -1,9 +1,10 @@
 {
   "name": "darkbot",
-  "version": "0.1.0",
+  "version": "0.7.4",
   "private": true,
   "scripts": {
-    "start": "node ./Main.js"
+    "test": "node ./Main.js TEST",
+    "start": "node ./Main.js 7778 0.7.4"
   },
   "dependencies": {
     "discord.js": "^11.0.0",

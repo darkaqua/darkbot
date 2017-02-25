@@ -1,63 +1,53 @@
 /**
  * Created by Pablo on 17/12/2016.
  */
+"use strict";
 
-//Usage: node Main.js port version [last_version]
-
+//region Constantes
 const fs = require('fs');
 const http = require('http');
+const https = require('https');
 const Discord = require('discord.js');
 const child_process = require("child_process");
 const createHandler = require('github-webhook-handler');
 
-const bot = new Discord.Client();
+let config = { token: "", handlerHash: "" };
+try{
+    config = JSON.parse(fs.readFileSync("../config.json"));
+} catch(e) {}
+const handler = createHandler({ path: '/webhook', secret: config.handlerHash });
 
-const config = JSON.parse(fs.readFileSync("../config.json"));
-const handler = createHandler({ path: '/webhook', secret: config['handlerHash'] });
+const e = {
+    travis_launch: (process.argv[2] === "TEST"),
 
-const port = process.argv[2] ? process.argv[2] : 7777;
-const currentVersion = process.argv[3];
-const lastVersion = process.argv[4];
+    port: process.argv[2] ? process.argv[2] : 7777,
+    currentVersion: process.argv[3],
+    lastVersion: process.argv[4],
+
+    bot: new Discord.Client(),
+    config: config
+};
+
+const getChannel = (channel_name) => {
+    return e.bot.channels.find("name", channel_name);
+};
 
 const Logger = require("./Logger");
 const logger = new Logger("out.log");
 
-const commands = require("./Commands");
+//endregion
 
-if(!port || !currentVersion) {
+if(!e.port || !e.currentVersion) {
     console.log("Usage: node Main.js port version [last_version]");
     process.exit();
 }
 
-http.createServer(function (req, res) {
-    handler(req, res, function (err) {
+http.createServer((req, res) => {
+    handler(req, res, (err) => {
         res.statusCode = 202;
         res.end('no such location');
     });
-}).listen(port);
-
-let channel = [];
-
-bot.on('ready', () => {
-    logger.message('Here we go! ❤');
-    logger.message("-Port: " + port);
-    logger.message("-Current versión: " + currentVersion);
-    if(lastVersion) logger.message("-Last versión: " + lastVersion);
-
-    bot.user.setGame("versión " + currentVersion + " ❤");
-    channel['bienvenida'] = bot.channels.find("name", "bienvenida");
-
-    setInterval(pingDiscord, 30*1000);
-});
-
-function pingDiscord(){
-    bot.user.setGame("versión " + currentVersion + " ❤")
-        .then()
-        .catch(logger.error);
-    bot.user.setStatus("online")
-        .then()
-        .catch(logger.error);
-}
+}).listen(e.port);
 
 handler.on("error", (err) => {
     logger.error('Error:', err.message)
@@ -66,16 +56,32 @@ handler.on("error", (err) => {
 handler.on("release", (event) => {
     const newVersion = event.payload.release["tag_name"];
 
-    bot.user.setGame("actualizando a " + newVersion + "...")
+    e.bot.user.setGame(`actualizando a ${newVersion}...`)
         .then()
         .catch(logger.error);
-    bot.user.setStatus("idle")
+
+    //Envía un embed a #darkbot_project con la info de la actualización
+    let embed = new Discord.RichEmbed();
+    getChannel('darkbot_project').sendMessage("Actualizando...");
+    embed.setTitle("v" + newVersion);
+    embed.setColor("#2691b3");
+    embed.setURL(event.payload.release["html_url"]);
+    embed.addField(event.payload.release["name"], event.payload.release["body"]);
+    embed.setTimestamp(event.payload.release["published_at"]);
+    if(event.payload.release["prerelease"] === true){
+      embed.setFooter("pre-release");
+    }else {
+      embed.setFooter("release");
+    }
+    getChannel('darkbot_project').sendEmbed(embed);
+
+    e.bot.user.setStatus("idle")
         .then()
         .catch(logger.error);
 
     //Clone from github
-    child_process.execSync("git clone https://github.com/darkaqua/darkbot " + __dirname + "/../" + newVersion);
-    process.chdir("../" + newVersion);
+    child_process.execSync(`git clone https://github.com/darkaqua/darkbot ${__dirname}/../${newVersion}`);
+    process.chdir(`../${newVersion}`);
     //Install dependencies
     try {
         child_process.execSync("npm install");
@@ -85,73 +91,24 @@ handler.on("release", (event) => {
     const outs = fs.openSync("start.log", "a");
     const errs = fs.openSync("start.log", "a");
     //Spawn the process
-    const newPort = (port == 7777) ? 7778 : 7777;
-    child_process.spawn("node", ["Main.js", newPort, newVersion, currentVersion], { detached: true, stdio: ["ignore", outs, errs] });
+    const newPort = (e.port === 7777) ? 7778 : 7777;
+    child_process.spawn("node", ["Main.js", newPort, newVersion, e.currentVersion], { detached: true, stdio: ["ignore", outs, errs] });
     logger.message("New version spawned.");
     process.exit();
 });
 
-const reactions = {
-    darkbot_updates: ["darkaqua", "js", "nodejs"],
-    voidpixel_updates: ["voidpixel", "xamarin", "win"],
-    shop_top: ["upvote", "downvote"]
-};
-
-bot.on('emojiCreate', emojiCreate => {
-   console.log(emojiCreate);
-});
-
-bot.on('message', message => {
-    // console.log(bot.permissions);//member.roles.findKey("name", "adm")
-
-    if(!message.guild && message.author.id != bot.user.id) {
-        message.channel.sendMessage("No nos deberian ver a solas... Hablame por una sala del servidor.");
-    } else if(message.content.startsWith("!")) {
-        if(message.guild) {
-            const cmdstr = message.content.substring(0,
-                message.content.indexOf(" ") > -1 ?
-                    message.content.indexOf(" ") :
-                    message.content.length);
-            const command = commands.list[cmdstr];
-            if(command && commands.hasPermission(command, message.member)) {
-                let params = { botuser: bot.user, version: currentVersion };
-                command.exec(message, params);
-            }
-        }
-    }
-
-    if(reactions.hasOwnProperty(message.channel.name)) {
-        reactions[message.channel.name].forEach((emoji) => {
-            message.react(bot.emojis.find("name", emoji)).then().catch(console.error);
-        });
-    }
-
-});
-
-//Usuario nuevo en el servidor
-bot.on("guildMemberAdd", join => {
-    channel['bienvenida'].sendMessage(join + " se ha unido al servidor! :upside_down:");
-    let userNumber = join.guild.memberCount;
-    if((userNumber%100) == 0){
-        channel['bienvenida'].sendMessage(join + ", eres el usuario " + userNumber + "! :stuck_out_tongue_winking_eye: ");
-      }
-    logger.message(join.user.username + " se ha unido al servidor! :)");
-});
-
-//Usuario deja el servidor
-bot.on("guildMemberRemove", leave => {
-    channel['bienvenida'].sendMessage(leave + " se ha ido del servidor! :frowning2: ");
-    logger.message(leave.user.username + " se ha ido del servidor! :(");
-});
-
-bot.login(config['token']);
-
 //Delete last version when this one is already running.
-if(lastVersion) {
+if(e.lastVersion) {
     try {
-        child_process.execSync("rm -rf ../" + lastVersion);
+        child_process.execSync(`rm -rf ../${e.lastVersion}`);
         logger.message("Last version deleted correctly.")
     } catch(e) {
-        logger.error("Error deleting last version: " + e)
+        logger.error(`Error deleting last version: ${e}`)
     }
+    let dk_pj_channel = getChannel('darkbot_project');
+    if(dk_pj_channel !== null)
+        dk_pj_channel.sendMessage("***Actualizado***");
 }
+
+//Llamada a los eventos del bot
+require('./BotEvents')(e);
