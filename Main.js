@@ -94,7 +94,9 @@ handler.on("release", (event) => {
     const newPort = (e.port === 7777) ? 7778 : 7777;
     child_process.spawn("node", ["Main.js", newPort, newVersion, e.currentVersion], { detached: true, stdio: ["ignore", outs, errs] });
     logger.message("New version spawned.");
-    process.exit();
+    setTimeout(() =>{ //Previene que termine el proceso antes de enviar el embed
+      process.exit();
+    }, 2000);
 });
 
 //Delete last version when this one is already running.
@@ -105,9 +107,11 @@ if(e.lastVersion) {
     } catch(e) {
         logger.error(`Error deleting last version: ${e}`)
     }
-    let dk_pj_channel = getChannel('darkbot_project');
-    if(dk_pj_channel !== null)
-        dk_pj_channel.sendMessage("***Actualizado***");
+  e.bot.on('ready', () => { //Espera a la conexión con Discord para avisar que teminó la actualización
+      let dk_pj_channel = getChannel('darkbot_project');
+      if(dk_pj_channel !== null)
+      dk_pj_channel.sendMessage("***Actualizado***");
+  });
 }
 
 //Llamada a los eventos del bot
