@@ -1,48 +1,46 @@
 /**
  * Created by Pablo on 25/02/2017.
  */
-//region Constantes
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
-const Discord = require('discord.js');
-const child_process = require("child_process");
+module.exports = (main) => {
 
-const Logger = require("./Logger");
-const logger = new Logger("out.log");
+    //region Constantes
+    const fs = require('fs');
+    const http = require('http');
+    const https = require('https');
+    const Discord = require('discord.js');
+    const child_process = require("child_process");
 
-const commands = require("./Commands");
+    const Logger = require("./Logger");
+    const logger = new Logger("out.log");
 
-const main = require('./Main');
+    const commands = require("./Commands");
 
-const bot = main.bot;
-const config = main.config;
-const port = main.port;
-const currentVersion = main.currentVersion;
-const lastVersion = main.lastVersion;
-const travis_launch = main.travis_launch;
+    const bot = main.bot;
+    const config = main.config;
+    const port = main.port;
+    const currentVersion = main.currentVersion;
+    const lastVersion = main.lastVersion;
+    const travis_launch = main.travis_launch;
 
-const pingDiscord = () => {
-    bot.user.setGame(`versión ${currentVersion} ❤`)
-        .then()
-        .catch(logger.error);
-    bot.user.setStatus("online")
-        .then()
-        .catch(logger.error);
-};
+    const pingDiscord = () => {
+        bot.user.setGame(`versión ${currentVersion} ❤`)
+            .then()
+            .catch(logger.error);
+        bot.user.setStatus("online")
+            .then()
+            .catch(logger.error);
+    };
 
-const getChannel = (channel_name) => {
-    return bot.channels.find("name", channel_name);
-};
+    const getChannel = (channel_name) => {
+        return bot.channels.find("name", channel_name);
+    };
 
-const reactions = {
-    darkbot_updates: ["darkaqua", "js", "nodejs"],
-    voidpixel_updates: ["voidpixel", "xamarin", "win"],
-    shop_top: ["upvote", "downvote"]
-};
-//endregion
-
-module.exports = () => {
+    const reactions = {
+        darkbot_updates: ["darkaqua", "js", "nodejs"],
+        voidpixel_updates: ["voidpixel", "xamarin", "win"],
+        shop_top: ["upvote", "downvote"]
+    };
+    //endregion
 
     bot.on('ready', () => {
         logger.message('Here we go! ❤');

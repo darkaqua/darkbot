@@ -15,7 +15,7 @@ try{
 } catch(e) {}
 const handler = createHandler({ path: '/webhook', secret: config.handlerHash });
 
-const e = module.exports = {
+const e = {
     travis_launch: (process.argv[2] === "TEST"),
 
     port: process.argv[2] ? process.argv[2] : 7777,
@@ -40,8 +40,8 @@ if(!e.port || !e.currentVersion) {
     process.exit();
 }
 
-http.createServer(function (req, res) {
-    handler(req, res, function (err) {
+http.createServer((req, res) => {
+    handler(req, res, (err) => {
         res.statusCode = 202;
         res.end('no such location');
     });
@@ -109,4 +109,4 @@ if(e.lastVersion) {
 }
 
 //Llamada a los eventos del bot
-require('./BotEvents');
+require('./BotEvents')(e);
