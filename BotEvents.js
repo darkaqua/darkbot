@@ -13,7 +13,7 @@ const logger = new Logger("out.log");
 
 const commands = require("./Commands");
 
-const main = require('./main');
+const main = require('./Main');
 const bot = main.bot;
 const port = main.port;
 const currentVersion = main.currentVersion;
