@@ -1,6 +1,8 @@
 /**
  * Created by Pablo on 25/02/2017.
  */
+"use strict";
+
 module.exports = (main) => {
 
     //region Constantes
