@@ -12,7 +12,7 @@ const createHandler = require('github-webhook-handler');
 let config = { token: "", handlerHash: "" };
 try{
     config = JSON.parse(fs.readFileSync("../config.json"));
-}
+} catch(e) {}
 const handler = createHandler({ path: '/webhook', secret: config.handlerHash });
 
 const e = module.exports = {
