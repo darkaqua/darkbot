@@ -70,6 +70,22 @@ handler.on("release", (event) => {
     bot.user.setGame("actualizando a " + newVersion + "...")
         .then()
         .catch(logger.error);
+
+        //Envía un embed a #darkbot_project con la info de la actualización
+        let embed = new Discord.RichEmbed();
+        bot.channels.get('260156423315521536').sendMessage("Actualizando...");
+        embed.setTitle("v" + newVersion);
+        embed.setColor("#2691b3");
+        embed.setURL(event.payload.release["html_url"]);
+        embed.addField(event.payload.release["name"], event.payload.release["body"]);
+        embed.setTimestamp(event.payload.release["published_at"]);
+        if(event.payload.release["prerelease"] === true){
+          embed.setFooter("pre-release");
+        }else {
+          embed.setFooter("release");
+        }
+        bot.channels.get('260156423315521536').sendEmbed(embed);
+
     bot.user.setStatus("idle")
         .then()
         .catch(logger.error);
@@ -188,4 +204,5 @@ if(lastVersion) {
     } catch(e) {
         logger.error("Error deleting last version: " + e)
     }
+    bot.channels.get('260156423315521536').sendMessage("***Actualizado***");
 }
