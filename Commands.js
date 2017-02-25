@@ -71,6 +71,16 @@ const commands = {
                 message.delete();
             }
         },
+        "!date": {
+            whatdo: "Obtener en que fecha estamos.",
+            roles: ["@everyone"],
+            exec: (message, params) => {
+                let date = new Date();
+
+                message.author.sendMessage("La fecha es `" + date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "` en este servidor.");
+                message.delete();
+            }
+        },
         "!help": { // <= acá hice cualquier cosa jaja, ya lo fixe
             whatdo: "Es el comando que estas usando ahora.",
             roles: ["@everyone"],
