@@ -14,7 +14,9 @@ const logger = new Logger("out.log");
 const commands = require("./Commands");
 
 const main = require('./Main');
+
 const bot = main.bot;
+const config = main.config;
 const port = main.port;
 const currentVersion = main.currentVersion;
 const lastVersion = main.lastVersion;
