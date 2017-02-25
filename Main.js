@@ -22,7 +22,8 @@ const e = module.exports = {
     currentVersion: process.argv[3],
     lastVersion: process.argv[4],
 
-    bot: new Discord.Client()
+    bot: new Discord.Client(),
+    config: config
 };
 
 const getChannel = (channel_name) => {
