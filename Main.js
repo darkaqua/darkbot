@@ -15,7 +15,7 @@ try{
 } catch(e) {}
 const handler = createHandler({ path: '/webhook', secret: config.handlerHash });
 
-const e = module.exports = {
+const e = {
     travis_launch: (process.argv[2] === "TEST"),
 
     port: process.argv[2] ? process.argv[2] : 7777,
@@ -109,4 +109,4 @@ if(e.lastVersion) {
 }
 
 //Llamada a los eventos del bot
-require('./BotEvents');
+require('./BotEvents')(e);
