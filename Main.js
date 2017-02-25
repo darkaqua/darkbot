@@ -9,8 +9,11 @@ const Discord = require('discord.js');
 const child_process = require("child_process");
 const createHandler = require('github-webhook-handler');
 
-const config = JSON.parse(fs.readFileSync("../config.json"));
-const handler = createHandler({ path: '/webhook', secret: config['handlerHash'] });
+let config = { token: "", handlerHash: "" };
+try{
+    config = JSON.parse(fs.readFileSync("../config.json"));
+}
+const handler = createHandler({ path: '/webhook', secret: config.handlerHash });
 
 const e = module.exports = {
     port: process.argv[2] ? process.argv[2] : 7777,
