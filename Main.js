@@ -89,7 +89,7 @@ handler.on("release", (event) => {
     const outs = fs.openSync("start.log", "a");
     const errs = fs.openSync("start.log", "a");
     //Spawn the process
-    const newPort = (port === 7777) ? 7778 : 7777;
+    const newPort = (e.port === 7777) ? 7778 : 7777;
     child_process.spawn("node", ["Main.js", newPort, newVersion, e.currentVersion], { detached: true, stdio: ["ignore", outs, errs] });
     logger.message("New version spawned.");
     process.exit();
