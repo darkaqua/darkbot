@@ -48,7 +48,6 @@ const commands = {
                         chan.fetchMessage(args[1]).then(msg => {
                             message.channel.sendEmbed(embedFactory.createEmbed(msg));
                         }).catch((err) => {
-                            console.log(err);
                             message.author.sendMessage("Ha ocurrido un error, quizá el mensaje no existe.");
                         });
                     } else {
