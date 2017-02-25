@@ -18,6 +18,7 @@ const bot = main.bot;
 const port = main.port;
 const currentVersion = main.currentVersion;
 const lastVersion = main.lastVersion;
+const travis_launch = main.travis_launch;
 
 const pingDiscord = () => {
     bot.user.setGame(`versión ${currentVersion} ❤`)
@@ -130,6 +131,8 @@ module.exports = () => {
         logger.message(`${leave.user.username} se ha ido del servidor! :(`);
     });
 
-    bot.login(config['token']);
+    if(!travis_launch){
+        bot.login(config['token']);
+    }
 
 };

@@ -16,6 +16,8 @@ try{
 const handler = createHandler({ path: '/webhook', secret: config.handlerHash });
 
 const e = module.exports = {
+    travis_launch: (process.argv[2] === "TEST"),
+
     port: process.argv[2] ? process.argv[2] : 7777,
     currentVersion: process.argv[3],
     lastVersion: process.argv[4],
