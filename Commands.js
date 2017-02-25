@@ -3,6 +3,8 @@
  * Modified by MagicInventor (http://magicinventor.xyz) on 20/12/2016
  * Modified by Pablo on 24/12/2016
  */
+"use strict";
+
 const embedFactory = require("./embedFactory.js");
 const Discord = require("discord.js");
 

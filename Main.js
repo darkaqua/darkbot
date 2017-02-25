@@ -1,6 +1,8 @@
 /**
  * Created by Pablo on 17/12/2016.
  */
+"use strict";
+
 //region Constantes
 const fs = require('fs');
 const http = require('http');
