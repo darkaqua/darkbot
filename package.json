@@ -1,0 +1,22 @@
+{
+  "name": "darkbot2",
+  "version": "0.1.0",
+  "description": "Darkbot v2, same thing, better code.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcmacker4/darkbot2.git"
+  },
+  "author": "mcmacker4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mcmacker4/darkbot2/issues"
+  },
+  "dependencies": {
+      "discord.js": "^11.0.0"
+  },
+  "homepage": "https://github.com/mcmacker4/darkbot2#readme"
+}
