@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const fs = require("fs");
 
 function hasPermission(command, member) {
     for(let i = 0; i < command.roles.length; i++) {
@@ -11,22 +12,28 @@ function hasPermission(command, member) {
 }
 
 exports.hasPermission = hasPermission;
-exports.list = {};
-exports.list["!help"] = {
-    roles: ["@everyone"],
-    descr: "Descripcion de los comandos disponibles.",
-    exec: (message) => {
-        let embed = new Discord.RichEmbed();
-        for(let cmd in exports.list) {
-            let command = exports.list[cmd];
-            if(hasPermission(command, message.member)) {
-                embed.addField(cmd, command.descr + " - " + command.roles.join());
+exports.list = {
+    "!help": {
+        roles: ["@everyone"],
+        descr: "Descripcion de los comandos disponibles.",
+        exec: (message) => {
+            let embed = new Discord.RichEmbed();
+            for(let cmd in exports.list) {
+                let command = exports.list[cmd];
+                if(hasPermission(command, message.member)) {
+                    embed.addField(cmd, command.descr + " - " + command.roles.join());
+                }
             }
+            message.author.sendEmbed(embed);
+            message.delete();
         }
-        message.author.sendEmbed(embed);
-        message.delete();
     }
 };
 
-exports.list["!ping"] = require("./ping.js").cmd;
-exports.list["!quote"] = require("./quote.js").cmd;
+fs.readdirSync(__dirname).forEach(name => {
+    let pattern = /^cm_(.+)\.js/i;
+    if(pattern.test(name)) {
+        let match = pattern.exec(name);
+        exports.list["!" + match[1]] = require("./" + match[0]);
+    }
+})

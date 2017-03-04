@@ -1,19 +1,14 @@
 const Discord = require("discord.js");
+const fs = require("fs");
+const path = require("path");
 const token = require("../../config.json")["token"];
 
-const evts = {};
-
-evts.ready = require("./events/ready.js").handler;
-evts.message = require("./events/message.js").handler;
-
-exports._bot_ = new Discord.Client(),
+global.botclient = exports._bot_ = new Discord.Client(),
 exports.init = function() {
-    //Acoplar todos los eventos del objeto `evts`
-    for(let evt in evts) {
-        if(evts.hasOwnProperty(evt)) {
-            exports._bot_.on(evt, evts[evt]);
-        }
-    }
+    //Acoplar todos los eventos de ./events/
+    fs.readdirSync(path.join(__dirname, "events")).forEach((name) =>{
+        exports._bot_.on(/(.+)\.js/i.exec(name)[1], require(`./events/${name}`));
+    })
     //Loguear el bot
     exports._bot_.login(token);
 }

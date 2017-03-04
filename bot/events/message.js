@@ -1,7 +1,6 @@
-
 const dispatch = require("../commands/dispatcher.js").dispatch;
 
-function message(message) {
+module.exports = (message) => {
 
     if(message.content.startsWith("!")) {
         dispatch(message);
@@ -11,5 +10,3 @@ function message(message) {
     }
 
 }
-
-exports.handler = message;

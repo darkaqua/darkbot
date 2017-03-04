@@ -1,6 +1,4 @@
 
-function ready() {
+module.exports = () => {
     console.log("Ready!");
 }
-
-exports.handler = ready;
