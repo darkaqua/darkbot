@@ -1,4 +1,4 @@
-const ping = {
+module.exports = {
     roles: ["@everyone"],
     descr: "Pong!",
     exec: (message) => {
@@ -6,5 +6,3 @@ const ping = {
         message.delete();
     }
 }
-
-module.exports = ping;

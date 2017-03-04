@@ -23,7 +23,7 @@ function createEmbed(message) {
     return embed;
 }
 
-const quote = {
+module.exports = {
     roles: ["@everyone"],
     descr: "Citar un mensaje del canal.",
     exec: (message) => {
@@ -45,5 +45,3 @@ const quote = {
         message.delete();
     }
 }
-
-module.exports = quote;
