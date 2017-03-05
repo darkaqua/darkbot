@@ -15,7 +15,7 @@ handler.on("release", (evt) => {
     let newVersion = evt.payload.release.tag_name;
     //Asegurarnos de que el bot esta `ready`
     if(global.bot.readyAt) {
-        global.bot.setGame("Actualizando a " + newVersion);
+        global.bot.user.setGame("Actualizando a " + newVersion);
         global.bot.channels.get("272393533040885761").sendMessage("Actualizando a la version " + newVersion);
     }
     //cerrar el servidor http para que el nuevo bot pueda escuchar el mismo puerto.
