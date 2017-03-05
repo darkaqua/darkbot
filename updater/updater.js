@@ -31,10 +31,8 @@ handler.on("release", (evt) => {
     const stdio = fs.openSync("out.log", "a");
 
     //Destruir el bot actual y ejecutar el nuevo.
-    global.bot.destroy().then(() => {
-        child_process.spawn("node", ["main.js", newVersion, global.config.version], { detached: true, stdio: ["ignore", stdio, stdio] });
-        process.exit();
-    });
+    child_process.spawn("node", ["main.js", newVersion, global.config.version], { detached: true, stdio: ["ignore", stdio, stdio] });
+    process.exit();
 });
 
 global.bot.on("ready", () => {
