@@ -37,10 +37,9 @@ handler.on("release", (evt) => {
     });
 });
 
-if(global.config.oldVersion) {
-    fs.rmdir("../" + global.config.oldVersion);
-}
-
 global.bot.on("ready", () => {
     global.bot.user.setGame("version " + global.config.version);
+    if(global.config.oldVersion) {
+        fs.rmdir("../" + global.config.oldVersion);
+    }
 });
