@@ -1,12 +1,17 @@
-const dispatch = require("../commands/dispatcher.js").dispatch;
+const cmd_dispatch = require("../commands/dispatcher.js");
+const issueMention = require("../issueMention.js");
 
 module.exports = (message) => {
 
+    if(!message.guild)
+        return;
+
+    let gitPttrn = /git#(\d+)/i;
+
     if(message.content.startsWith("!")) {
-        dispatch(message);
-    } else if(message.mentions.users.get("229262875934326787")) {
-        message.author.sendMessage("Ke Kiere?");
-        message.delete();
+        cmd_dispatch(message);
+    } else if(gitPttrn.test(message.content)) {
+        issueMention(message, gitPttrn.exec(message.content)[1]);
     }
 
 }

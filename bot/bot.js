@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const path = require("path");
-const token = require("../../config.json")["token"];
 
 global.botclient = exports._bot_ = new Discord.Client(),
 exports.init = function() {
@@ -10,5 +9,5 @@ exports.init = function() {
         exports._bot_.on(/(.+)\.js/i.exec(name)[1], require(`./events/${name}`));
     })
     //Loguear el bot
-    exports._bot_.login(token);
+    exports._bot_.login(global.config.token);
 }
