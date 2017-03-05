@@ -14,8 +14,8 @@ const server = http.createServer((req, res) => {
 handler.on("release", (evt) => {
     let newVersion = evt.payload.release.tag_name;
     //Asegurarnos de que el bot esta `ready`
-    if(global.bot.readyAt.getTime() < new Date().getTime()) {
-
+    if(global.bot.readyAt) {
+        global.bot.setGame("Actualizando a " + newVersion);
         global.bot.channels.get("272393533040885761").sendMessage("Actualizando a la version " + newVersion);
     }
     //cerrar el servidor http para que el nuevo bot pueda escuchar el mismo puerto.
@@ -36,7 +36,6 @@ handler.on("release", (evt) => {
 });
 
 global.bot.on("ready", () => {
-    global.bot.user.setGame("version " + global.config.version);
     if(global.config.oldVersion) {
         try {
             child_process.execSync("rm -rf ../" + global.config.oldVersion);
@@ -44,4 +43,6 @@ global.bot.on("ready", () => {
             console.log("Error al eliminar version antigua: " + err.message);
         }
     }
+    global.bot.user.setGame("version " + global.config.version);
+    global.bot.channels.get("272393533040885761").sendMessage("Se ha actualizado correctamente.");
 });
