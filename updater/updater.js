@@ -37,6 +37,7 @@ handler.on("release", (evt) => {
 
 global.bot.on("ready", () => {
     if(global.config.oldVersion) {
+        global.bot.channels.get("272393533040885761").sendMessage("Se ha actualizado correctamente.");
         try {
             child_process.execSync("rm -rf ../" + global.config.oldVersion);
         } catch (err) {
@@ -44,5 +45,4 @@ global.bot.on("ready", () => {
         }
     }
     global.bot.user.setGame("version " + global.config.version);
-    global.bot.channels.get("272393533040885761").sendMessage("Se ha actualizado correctamente.");
 });
