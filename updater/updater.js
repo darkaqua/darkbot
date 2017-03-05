@@ -54,6 +54,7 @@ global.bot.on("ready", () => {
                     let type = release["prerelease"] ? "pre-release" : "release";
                     let embed = new Discord.RichEmbed({ timestamp: release["created_at"] });
                     embed.setAuthor(release["tag_name"] + ": " + release["name"], undefined, release["html_url"]);
+                    embed.setDescription(release["body"]);
                     embed.setFooter(type);
                     embed.setColor("#2691b3");
                     global.bot.channels.get("272393533040885761").sendEmbed(embed);
