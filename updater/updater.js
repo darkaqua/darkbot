@@ -1,5 +1,7 @@
 const fs = require("fs");
 const http = require("http");
+const https = require("https");
+const Discord = require("discord.js");
 const child_process = require("child_process");
 const createHandler = require("github-webhook-handler");
 const handler = createHandler({path: "/", secret: global.config.webhook_secret});
@@ -16,7 +18,6 @@ handler.on("release", (evt) => {
     //Asegurarnos de que el bot esta `ready`
     if(global.bot.readyAt) {
         global.bot.user.setGame("Actualizando a " + newVersion);
-        global.bot.channels.get("272393533040885761").sendMessage("Actualizando a la version " + newVersion);
     }
     //cerrar el servidor http para que el nuevo bot pueda escuchar el mismo puerto.
     server.close();
@@ -37,7 +38,27 @@ handler.on("release", (evt) => {
 
 global.bot.on("ready", () => {
     if(global.config.oldVersion) {
-        global.bot.channels.get("272393533040885761").sendMessage("Se ha actualizado correctamente.");
+        //Avisar con embed de que se ha actualizado.
+        //Pide info sobre la nueva version a la api de github.
+        let req = https.request(options, (res) => {
+            let data = "";
+            res.on("data", chunk => { data += chunk; });
+            res.on("end", () => {
+                if(res.statusCode !== 404) {
+                    let release = JSON.parse(data);
+                    let type = release["prerelease"] ? "pre-release" : "release";
+                    let embed = new Discord.RichEmbed({ timestamp: release["created_at"] });
+                    embed.setAuthor(release["tag_name"] + ": " + release["name"], undefined, release["html_url"]);
+                    embed.setFooter(type);
+                    embed.setColor("#2691b3");
+                    global.bot.channels.get("272393533040885761").sendEmbed(embed);
+                }
+            });
+        });
+        req.on("error", (err) => { logger.error('Request Error:' + err.message) });
+        req.end();
+
+        //Eliminar version antigua
         try {
             child_process.execSync("rm -rf ../" + global.config.oldVersion);
         } catch (err) {
