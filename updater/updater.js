@@ -38,6 +38,10 @@ handler.on("release", (evt) => {
 global.bot.on("ready", () => {
     global.bot.user.setGame("version " + global.config.version);
     if(global.config.oldVersion) {
-        fs.rmdir("../" + global.config.oldVersion);
+        try {
+            child_process.execSync()
+        } catch (err) {
+            console.log("Error al eliminar version antigua: " err.message);
+        }
     }
 });
