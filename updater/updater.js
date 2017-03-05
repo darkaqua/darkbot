@@ -40,10 +40,16 @@ global.bot.on("ready", () => {
     if(global.config.oldVersion) {
         //Avisar con embed de que se ha actualizado.
         //Pide info sobre la nueva version a la api de github.
-        let req = https.request(`https:\/\/api.github.com/repos/mcmacker4/darkbot2/releases/tags${global.config.oldVersion}`, (res) => {
+        let options = {
+            hostname: "api.github.com",
+            path: `/repos/mcmacker4/darkbot2/releases/tags/${global.config.oldVersion}`,
+            headers: { "User-Agent": "darkaqua-darkbot" }
+        };
+        let req = https.request(options, (res) => {
             let data = "";
             res.on("data", chunk => { data += chunk; });
             res.on("end", () => {
+                console.log(data);
                 if(res.statusCode !== 404) {
                     let release = JSON.parse(data);
                     let type = release["prerelease"] ? "pre-release" : "release";
