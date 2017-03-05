@@ -41,7 +41,7 @@ global.bot.on("ready", () => {
         try {
             child_process.execSync()
         } catch (err) {
-            console.log("Error al eliminar version antigua: " err.message);
+            console.log("Error al eliminar version antigua: " + err.message);
         }
     }
 });
