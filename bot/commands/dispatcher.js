@@ -1,7 +1,7 @@
 
 const commands = require("./commands.js");
 
-exports.dispatch = function(message) {
+module.exports = function(message) {
     let content = message.content;
     let parts = content.split(" ");
     if(commands.list.hasOwnProperty(parts[0])) {

@@ -29,9 +29,9 @@ module.exports = {
     exec: (message) => {
         let args = message.content.split(" ");
         if(!args[1]) {
-            message.author.sendMessage("Uso: !quote [id del mensaje] (id del canal) --- La id del canal se puede omitir si el mensaje original esta en el mismo canal.")
+            message.author.sendMessage("Uso: !quote [id del mensaje] (mencion del canal) --- La id del canal se puede omitir si el mensaje original esta en el mismo canal.")
         } else {
-            let chan = (() => { return args[2] ? message.guild.channels.get(args[2]) : message.channel; })();
+            let chan = message.mentions.channels.size > 0 ? message.mentions.channels.first() : message.channel;
             if(chan) {
                 chan.fetchMessage(args[1]).then(msg => {
                     message.channel.sendEmbed(createEmbed(msg), `Citado por ${message.author}`);
