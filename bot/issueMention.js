@@ -4,7 +4,7 @@ const Discord = require("discord.js");
 module.exports = (message, issue) => {
     let options = {
         hostname: "api.github.com",
-        path: `/repos/darkaqua/darkbot/issues/${issue}`,
+        path: `/repos/mcmacker4/darkbot2/issues/${issue}`,
         headers: { "User-Agent": "darkaqua-darkbot2" }
     };
     let req = https.request(options, (res) => {
