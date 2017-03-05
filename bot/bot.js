@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const path = require("path");
 
-global.botclient = exports._bot_ = new Discord.Client(),
+global.bot = exports._bot_ = new Discord.Client(),
 exports.init = function() {
     //Acoplar todos los eventos de ./events/
     fs.readdirSync(path.join(__dirname, "events")).forEach((name) =>{
