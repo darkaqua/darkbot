@@ -1,8 +1,9 @@
 module.exports = {
     roles: ["@everyone"],
     descr: "Pong!",
-    exec: (message) => {
-        message.author.sendMessage(`Pong! (${message.author.client.ping}ms)`);
+    exec: (message, args) => {
+        let ping = Math.round(message.author.client.ping);
+        message.author.sendMessage(`Pong! (${ping}ms)`);
         message.delete();
     }
 }

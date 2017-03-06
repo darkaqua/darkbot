@@ -1,6 +1,10 @@
 const https = require("https");
 const Discord = require("discord.js");
 
+//Se ejecuta cuando alguien ha mencionado una issue de la forma git#32
+//siendo 32 el numero de la issue.
+//Pide la info de la issue a la API de GitHub y responde al mensaje con un
+//embed que contiene informacion sobre la issue y sus links.
 module.exports = (message, issue) => {
     let options = {
         hostname: "api.github.com",
