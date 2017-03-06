@@ -12,7 +12,7 @@ exports.hasPermission = (command, member) => {
 }
 
 exports.list = {
-    "!help": {
+    "help": {
         roles: ["@everyone"],
         descr: "Descripcion de los comandos disponibles.",
         exec: (message) => {
@@ -33,6 +33,6 @@ fs.readdirSync(__dirname).forEach(name => {
     let pattern = /^cm_(.+)\.js/i;
     if(pattern.test(name)) {
         let match = pattern.exec(name);
-        exports.list["!" + match[1]] = require("./" + match[0]);
+        exports.list[match[1]] = require("./" + match[0]);
     }
 })
