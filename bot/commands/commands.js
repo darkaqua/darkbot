@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 
-exports.hasPermission = (command, member) => {
+function hasPermission(command, member) => {
     for(let i = 0; i < command.roles.length; i++) {
         let role = command.roles[i];
         if(member.roles.findKey("name", role)) {
@@ -11,6 +11,7 @@ exports.hasPermission = (command, member) => {
     return false;
 }
 
+exports.hasPermission = hasPermission;
 exports.list = {
     "help": {
         roles: ["@everyone"],
