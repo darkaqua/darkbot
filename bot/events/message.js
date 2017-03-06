@@ -16,7 +16,10 @@ module.exports = (message) => {
         cmd_dispatch(message);
     } else if(gitPttrn.test(message.content)) {
         //Se ha mencionado una issue.
-        issueMention(message, gitPttrn.exec(message.content)[1]);
+        let match;
+        while(match = gitPttrn.exec(message.content)) {
+            issueMention(message, gitPttrn.exec(message.content)[1]);
+        }
     }
 
 }
