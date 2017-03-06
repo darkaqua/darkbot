@@ -18,7 +18,7 @@ module.exports = (message) => {
         //Se ha mencionado una issue.
         let match;
         while(match = gitPttrn.exec(message.content)) {
-            issueMention(message, gitPttrn.exec(message.content)[1]);
+            issueMention(message, match[1]);
         }
     }
 
