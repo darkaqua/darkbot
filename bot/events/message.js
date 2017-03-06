@@ -8,18 +8,16 @@ module.exports = (message) => {
     if(!message.guild)
         return;
 
-    //El pattern que sigue una mencion de una issue de github
-    let gitPttrn = /git#(\d+)/i;
-
     if(message.content.startsWith(global.config.prefix)) {
         //El mensaje empieza por el prefijo
         cmd_dispatch(message);
-    } else if(gitPttrn.test(message.content)) {
-        //Se ha mencionado una issue.
-        let match;
-        while(match = gitPttrn.exec(message.content)) {
-            issueMention(message, match[1]);
-        }
+    }
+
+    //El pattern que sigue una mencion de una issue de github
+    let gitPttrn = /git#(\d+)/ig;
+    //Se ha mencionado una issue.
+    while(match = gitPttrn.exec(message.content)) {
+        issueMention(message, match[1]);
     }
 
 }
