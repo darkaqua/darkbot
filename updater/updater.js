@@ -6,6 +6,7 @@ const child_process = require("child_process");
 const createHandler = require("github-webhook-handler");
 const handler = createHandler({path: "/", secret: global.config.webhook_secret});
 
+//El servidor que se encarga de recibir las POST requests de github (webhooks)
 const server = http.createServer((req, res) => {
     handler(req, res, (err) => {
         res.statusCode = 404;
@@ -13,6 +14,7 @@ const server = http.createServer((req, res) => {
     });
 }).listen(7777);
 
+//Evento se ejecuta cuando sale una release del bot
 handler.on("release", (evt) => {
     let newVersion = evt.payload.release.tag_name;
     //Asegurarnos de que el bot esta `ready`
