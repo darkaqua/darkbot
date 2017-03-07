@@ -7,7 +7,10 @@ module.exports = {
         if(statuses.includes(args[1])) {
             global.bot.user.setStatus(args[1]);
         } else {
-            message.author.sendEmbed({ description: "El estado debe ser `online`, `idle`, `invisible` o `dnd` (do not disturb)." });
+            message.author.sendEmbed({
+                description: "El estado debe ser `online`, `idle`, `invisible` o `dnd` (do not disturb).",
+                color: 2527667
+            });
         }
         message.delete();
     }

@@ -17,7 +17,7 @@ exports.list = {
         roles: ["@everyone"],
         descr: "Descripcion de los comandos disponibles.",
         exec: (message) => {
-            let embed = new Discord.RichEmbed();
+            let embed = new Discord.RichEmbed({ color: 2527667 });
             for(let cmd in exports.list) {
                 let command = exports.list[cmd];
                 if(hasPermission(command, message.member)) {
