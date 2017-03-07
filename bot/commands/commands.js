@@ -21,7 +21,7 @@ exports.list = {
             for(let cmd in exports.list) {
                 let command = exports.list[cmd];
                 if(hasPermission(command, message.member)) {
-                    embed.addField(cmd, command.descr + " - " + command.roles.join());
+                    embed.addField(global.config.prefix + cmd, command.descr + " - " + command.roles.join());
                 }
             }
             message.author.sendEmbed(embed);
