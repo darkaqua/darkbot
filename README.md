@@ -20,8 +20,12 @@ Versión antigua [aquí](https://github.com/darkaqua/darkbot_old)
 ```
 
 ###Recomendaciones para programar
+
 ####No usar
+
 - ``require('./Main')`` 
 - ``var``, en su lugar ``const`` o ``let``
+
 ####Evitar usar
+
 - ``function a(){}``, en su lugar ``const a = () => {}`` o ``a: () => {}``
