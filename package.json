@@ -1,5 +1,5 @@
 {
-  "name": "darkbot2",
+  "name": "darkbot",
   "version": "1.0.0",
   "description": "Darkbot v2, same thing, better code.",
   "main": "node ./main.js",
@@ -8,16 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mcmacker4/darkbot2.git"
+    "url": "git+https://github.com/darkaqua/darkbot.git"
   },
-  "author": "mcmacker4",
+  "author": "darkaqua",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mcmacker4/darkbot2/issues"
+    "url": "https://github.com/darkaqua/darkbot/issues"
   },
   "dependencies": {
       "discord.js": "^11.0.0",
       "github-webhook-handler": "^0.6.0"
   },
-  "homepage": "https://github.com/mcmacker4/darkbot2#readme"
+  "homepage": "https://github.com/darkaqua/darkbot#readme"
 }
