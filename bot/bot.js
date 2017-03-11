@@ -11,6 +11,7 @@ exports.init = function() {
         //bot.on(<nombre del archivo sin extension>, require(nombre del archivo))
         exports._bot_.on(/(.+)\.js/i.exec(name)[1], require(`./events/${name}`));
     })
-    //Loguear el bot on el token
-    exports._bot_.login(global.config.token);
+    //Loguear el bot con el token
+    if(global.config.version !== 'travis')
+        exports._bot_.login(global.config.token);
 }

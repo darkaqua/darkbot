@@ -13,11 +13,13 @@ module.exports = (message) => {
         cmd_dispatch(message);
     }
 
-    //El pattern que sigue una mencion de una issue de github
-    let gitPttrn = /git#(\d+)/ig;
-    //Se ha mencionado una issue.
-    while(match = gitPttrn.exec(message.content)) {
-        issueMention(message, match[1]);
+    if(message.channel.name === "darkbot_project") {
+        //El pattern que sigue una mencion de una issue de github
+        let gitPttrn = /git#(\d+)/ig;
+        //Se ha mencionado una issue.
+        while(match = gitPttrn.exec(message.content)) {
+            issueMention(message, match[1]);
+        }
     }
 
 }
