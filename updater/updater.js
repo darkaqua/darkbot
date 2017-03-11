@@ -63,7 +63,7 @@ global.bot.on("ready", () => {
                     embed.setDescription(release["body"]);
                     embed.setFooter(type);
                     embed.setColor("#2691b3");
-                    global.bot.channels.get("272393533040885761").sendEmbed(embed, "Nueva version!");
+                    global.bot.channels.find("name", "darkbot_project").sendEmbed(embed, "Nueva version!");
                 }
             });
         });
