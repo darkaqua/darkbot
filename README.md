@@ -6,3 +6,12 @@ Si quieres colaborar en el proyecto unete a nuestro [discord](http://darkaqua.ne
 
 Reescrito por [mcmacker4](https://github.com/mcmacker4)<br>
 Versión antigua [aquí](https://github.com/darkaqua/darkbot_old)
+
+Ejemplo de config.json<br>
+```json
+{
+    "token": "<token aqui>",
+    "webhook_secret": "<password del webhook>",
+    "prefix": "!"
+}
+```
