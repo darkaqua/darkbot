@@ -5,10 +5,14 @@ if(process.argv.length < 3) {
     process.exit();
 }
 
-//Cargar la configuracion del archivo de configuracion
-global.config = require("../config.json");
 //La version se pasa como primer argumento en la consola
 global.config.version = process.argv[2];
+//Cargar la configuracion del archivo de configuracion
+//En caso de que la versión actual sea 'travis', para comprobar si el
+//codigo es correcto, se pasarán valores vacios.
+global.config = global.config.version === 'travis'
+    ? { token: '', webhook_secret: '', prefix: 'travis'}
+    : require("../config.json");
 //La version antigua es opcional y se pasa como segundo argumento
 if(process.argv[3])
     global.config.oldVersion = process.argv[3];
