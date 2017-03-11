@@ -12,7 +12,11 @@ const server = http.createServer((req, res) => {
         res.statusCode = 404;
         res.end("No such file or directory.");
     });
-}).listen(7777);
+});
+
+//Evita arrancar el servidor http en caso de que travis tenga el control
+if(global.config.version !== 'travis')
+    server.listen(7777);
 
 //Evento se ejecuta cuando sale una release del bot
 handler.on("release", (evt) => {
@@ -25,7 +29,7 @@ handler.on("release", (evt) => {
     server.close();
 
     //Clonar la nueva version a una carpeta paralela
-    child_process.execSync("git clone https:\/\/github.com/mcmacker4/darkbot2 ../" + newVersion);
+    child_process.execSync("git clone https:\/\/github.com/darkaqua/darkbot ../" + newVersion);
     process.chdir("../" + newVersion)
     //Instalar dependencias
     child_process.execSync("npm install");
@@ -44,7 +48,7 @@ global.bot.on("ready", () => {
         //Pide info sobre la nueva version a la api de github.
         let options = {
             hostname: "api.github.com",
-            path: `/repos/mcmacker4/darkbot2/releases/tags/${global.config.version}`,
+            path: `/repos/darkaqua/darkbot/releases/tags/${global.config.version}`,
             headers: { "User-Agent": "darkaqua-darkbot" }
         };
         let req = https.request(options, (res) => {
