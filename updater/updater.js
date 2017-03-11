@@ -12,7 +12,11 @@ const server = http.createServer((req, res) => {
         res.statusCode = 404;
         res.end("No such file or directory.");
     });
-}).listen(7777);
+});
+
+//Evita arrancar el servidor http en caso de que travis tenga el control
+if(global.config.version !== 'travis')
+    server.listen(7777);
 
 //Evento se ejecuta cuando sale una release del bot
 handler.on("release", (evt) => {
