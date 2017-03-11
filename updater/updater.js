@@ -76,6 +76,8 @@ global.bot.on("ready", () => {
         } catch (err) {
             console.log("Error al eliminar version antigua: " + err.message);
         }
+
+        global.config.oldVersion = undefined; //Evitar que vuelva a anunciar la nueva version.
     }
     global.bot.user.setGame("version " + global.config.version + " ❤");
 });
