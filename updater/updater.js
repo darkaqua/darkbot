@@ -4,13 +4,13 @@ const https = require("https");
 const Discord = require("discord.js");
 const child_process = require("child_process");
 const createHandler = require("github-webhook-handler");
-const handler = createHandler({path: "/", secret: global.config.webhook_secret});
+const handler = createHandler({path: global.config.webhook.path, secret: global.config.webhook.secret});
 
 //El servidor que se encarga de recibir las POST requests de github (webhooks)
 const server = http.createServer((req, res) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress ||
             req.socket.remoteAddress || req.connection.socket.remoteAddress;
-    console.log(`Incoming request: \n\tClient IP: ${ip}\n\tURL: ${req.url}\n\tMethod: ${req.method}`);
+    console.log(`[${new Date().toLocaleString()}] Incoming request: \n\tClient IP: ${ip}\n\tPath: ${req.url}\n\tMethod: ${req.method}`);
     handler(req, res, (err) => {
         res.statusCode = 404;
         res.end("No such file or directory.");
@@ -19,7 +19,7 @@ const server = http.createServer((req, res) => {
 
 //Evita arrancar el servidor http en caso de que travis tenga el control
 if(global.config.version !== 'travis')
-    server.listen(global.config.whport);
+    server.listen(global.config.webhook.port);
 
 //Evento se ejecuta cuando sale una release del bot
 handler.on("release", (evt) => {

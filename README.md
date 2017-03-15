@@ -14,9 +14,12 @@ Versión antigua [aquí](https://github.com/darkaqua/darkbot_old)
 ```json
 {
     "token": "<token aqui>",
-    "webhook_secret": "<password del webhook>",
     "prefix": "!",
-    "whport": 1337
+    "webhook": {
+        "secret": "<password del webhook>",
+        "port": 1337,
+        "path": "/"
+    }
 }
 ```
 
