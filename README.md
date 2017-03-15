@@ -10,22 +10,23 @@ Si quieres colaborar en el proyecto unete a nuestro [discord](http://darkaqua.ne
 Reescrito por [mcmacker4](https://github.com/mcmacker4)<br>
 Versión antigua [aquí](https://github.com/darkaqua/darkbot_old)
 
-###Ejemplo de config.json<br>
+### Ejemplo de config.json<br>
 ```json
 {
     "token": "<token aqui>",
     "webhook_secret": "<password del webhook>",
-    "prefix": "!"
+    "prefix": "!",
+    "whport": 1337 (el puerto a usar por el servidor http)
 }
 ```
 
-###Recomendaciones para programar
+### Recomendaciones para programar
 
-####No usar
+#### No usar
 
-- ``require('./Main')`` 
-- ``var``, en su lugar ``const`` o ``let``
+- `require('./Main')`
+- `var`, en su lugar `const` o `let`
 
-####Evitar usar
+#### Evitar usar
 
-- ``function a(){}``, en su lugar ``const a = () => {}`` o ``a: () => {}``
+- `function a(){}`, en su lugar `const a = () => {}` o `a: () => {}`

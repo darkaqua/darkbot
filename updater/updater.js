@@ -8,6 +8,9 @@ const handler = createHandler({path: "/", secret: global.config.webhook_secret})
 
 //El servidor que se encarga de recibir las POST requests de github (webhooks)
 const server = http.createServer((req, res) => {
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress ||
+            req.socket.remoteAddress || req.connection.socket.remoteAddress;
+    console.log(`Incoming request: \n\tClient IP: ${ip}\n\tURL: ${req.url}\n\tMethod: ${req.method}`);
     handler(req, res, (err) => {
         res.statusCode = 404;
         res.end("No such file or directory.");
@@ -16,11 +19,12 @@ const server = http.createServer((req, res) => {
 
 //Evita arrancar el servidor http en caso de que travis tenga el control
 if(global.config.version !== 'travis')
-    server.listen(7777);
+    server.listen(global.config.whport);
 
 //Evento se ejecuta cuando sale una release del bot
 handler.on("release", (evt) => {
     let newVersion = evt.payload.release.tag_name;
+    console.log("UPDATING!");
     //Asegurarnos de que el bot esta `ready`
     if(global.bot.readyAt) {
         global.bot.user.setGame("Actualizando a " + newVersion);
@@ -40,6 +44,10 @@ handler.on("release", (evt) => {
     //Destruir el bot actual y ejecutar el nuevo.
     child_process.spawn("node", ["main.js", newVersion, global.config.version], { detached: true, stdio: ["ignore", stdio, stdio] });
     process.exit();
+});
+
+handler.on("error", (err) => {
+    console.log("Webhook Handler Error: " + err.message);
 });
 
 global.bot.on("ready", () => {
