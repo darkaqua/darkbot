@@ -9,7 +9,15 @@ if(process.argv.length < 3) {
 //En caso de que la versión actual sea 'travis', para comprobar si el
 //codigo es correcto, se pasarán valores vacios.
 global.config = process.argv[2] === 'travis'
-    ? { token: '', webhook_secret: '', prefix: 'travis', whport: 7777 }
+    ? {
+        token: '',
+        prefix: 'travis',
+        webhook: {
+            secret: '',
+            port: 0,
+            path: '/'
+        }
+    }
     : require("../config.json");
 //La version se pasa como primer argumento en la consola
 global.config.version = process.argv[2];
