@@ -16,7 +16,7 @@ Versión antigua [aquí](https://github.com/darkaqua/darkbot_old)
     "token": "<token aqui>",
     "webhook_secret": "<password del webhook>",
     "prefix": "!",
-    "whport": 1337 (el puerto a usar por el servidor http)
+    "whport": 1337
 }
 ```
 
