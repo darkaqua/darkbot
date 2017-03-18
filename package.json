@@ -4,7 +4,8 @@
   "description": "Darkbot v2, same thing, better code.",
   "main": "node ./main.js",
   "scripts": {
-    "test": "node main.js travis"
+    "test": "node main.js travis",
+    "start": "node main.js 1.0.0"
   },
   "repository": {
     "type": "git",
