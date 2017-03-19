@@ -33,7 +33,7 @@ handler.on("release", (evt) => {
     server.close();
 
     //Clonar la nueva version a una carpeta paralela
-    child_process.execSync("git clone https:\/\/github.com/darkaqua/darkbot ../" + newVersion);
+    child_process.execSync("git clone -b master https:\/\/github.com/darkaqua/darkbot ../" + newVersion);
     process.chdir("../" + newVersion)
     //Instalar dependencias
     child_process.execSync("npm install");
