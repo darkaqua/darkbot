@@ -6,7 +6,7 @@ module.exports = {
         message.delete();
     }
 }
-function ruleta(){
+ruleta: () => {
     if(Math.floor(Math.random() * 20 % 6)== 1){
         return "!Pum! Muerto"
     }
