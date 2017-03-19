@@ -5,7 +5,7 @@
   "main": "node ./main.js",
   "scripts": {
     "test": "node main.js travis",
-    "start": "node main.js 1.0.0"
+    "start": "node main.js test"
   },
   "repository": {
     "type": "git",
