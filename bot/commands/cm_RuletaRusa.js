@@ -7,7 +7,7 @@ module.exports = {
     }
 }
 const ruleta = () => {
-    if(Math.floor(Math.random() * 20 % 6)== 1){
+    if(Math.floor(Math.random() * 20 % 6) === 1){
         return "¡Pum! Muerto"
     }
     return "La suerte te acompaña..."
