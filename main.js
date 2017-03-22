@@ -19,6 +19,8 @@ global.config = process.argv[2] === 'travis'
         }
     }
     : require("../config.json");
+//Datos de los canales y roles del server
+global.data = require("./data.json");
 //La version se pasa como primer argumento en la consola
 global.config.version = process.argv[2];
 //La version antigua es opcional y se pasa como segundo argumento
