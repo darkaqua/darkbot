@@ -4,8 +4,8 @@ module.exports = {
 	exec: (message, args) => {
 		if (args[1] && args[2]) {
 			let roleName = args.splice(2).join(' ');
-			let rol = global.data.roles[roleName] ? global.data.roles[roleName].id : "";
-			if (rol && global.data.roles[roleName]["auto-assignable"] === true) {
+			let rol = roleName ? message.guild.roles.findKey("name", roleName) : "";
+			if (rol && global.config.roles.includes(roleName)) {
 				//Si el rol es auto asignable
 				//busca que el argumento sea "leave" o "join"
 				if (args[1] == "join") {
@@ -21,7 +21,7 @@ module.exports = {
 				//Si el rol no existe o no es auto asignable
 				//avisa al usuario de manera privada
 			} else {
-				message.author.sendMessage("Ese rol no existe o es auto asignable :thinking:\nrevisa que lo hayas escrito correctamente.");
+				message.author.sendMessage("Ese rol no existe o no es auto asignable :thinking:\nrevisa que lo hayas escrito correctamente.");
 			}
 			//Si no se ha usado el comando correctamente, avisa al usuario de manera privada
 		} else {
