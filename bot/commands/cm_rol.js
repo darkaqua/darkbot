@@ -9,12 +9,20 @@ module.exports = {
 				//Si el rol es auto asignable
 				//busca que el argumento sea "leave" o "join"
 				if (args[1] == "join") {
-					message.member.addRole(rol);
-					message.author.sendMessage(`Te has unido a \`${roleName}\``);
+					message.member.addRole(rol).then(member =>
+						message.author.sendMessage(`Te has unido a \`${roleName}\``)
+					).catch(err => {
+						message.author.sendMessage(`Se ha producido un error.`);
+						console.log(err.message);
+					});
 				} else if (args[1] == "leave") {
-					message.member.removeRole(rol);
-					message.author.sendMessage(`Has salido de \`${roleName}\``);
-					//Si el arugumento no es "leave" o "join", avisa al usuario de manera privada
+					message.member.removeRole(rol).then(member =>
+						message.author.sendMessage(`Has salido de \`${roleName}\``)
+					).catch(err => {
+						message.author.sendMessage(`Se ha producido un error.`);
+						console.log(err.message);
+					});
+				//Si el arugumento no es "leave" o "join", avisa al usuario de manera privada
 				} else {
 					message.author.sendMessage("Uso: !rol join/leave [nombre].");
 				}
