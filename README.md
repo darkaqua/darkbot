@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/darkaqua/darkbot.svg?branch=master)](https://travis-ci.org/darkaqua/darkbot)
 [![Discord Status](https://discordapp.com/api/guilds/244102569729720321/widget.png)](http://darkaqua.net)
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 API de discord usada para el proyecto en node.js usando la libreria [discord.js](https://discord.js.org/#/docs/main/master/general/welcome)
 
 Si quieres colaborar en el proyecto unete a nuestro [discord](http://darkaqua.net)
