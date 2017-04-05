@@ -16,6 +16,7 @@ Versión antigua [aquí](https://github.com/darkaqua/darkbot_old)
 {
     "token": "<token aqui>",
     "prefix": "!",
+    "roles": ["<lista de roles auto-asignables>"],
     "webhook": {
         "secret": "<password del webhook>",
         "port": 1337,
