@@ -4,10 +4,13 @@ const https = require("https");
 const Discord = require("discord.js");
 const child_process = require("child_process");
 const createHandler = require("github-webhook-handler");
-const handler = createHandler({path: "/", secret: global.config.webhook_secret});
+const handler = createHandler({path: global.config.webhook.path, secret: global.config.webhook.secret});
 
 //El servidor que se encarga de recibir las POST requests de github (webhooks)
 const server = http.createServer((req, res) => {
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress ||
+            req.socket.remoteAddress || req.connection.socket.remoteAddress;
+    console.log(`[${new Date().toLocaleString()}] Incoming request: \n\tClient IP: ${ip}\n\tPath: ${req.url}\n\tMethod: ${req.method}`);
     handler(req, res, (err) => {
         res.statusCode = 404;
         res.end("No such file or directory.");
@@ -16,11 +19,12 @@ const server = http.createServer((req, res) => {
 
 //Evita arrancar el servidor http en caso de que travis tenga el control
 if(global.config.version !== 'travis')
-    server.listen(7777);
+    server.listen(global.config.webhook.port);
 
 //Evento se ejecuta cuando sale una release del bot
 handler.on("release", (evt) => {
     let newVersion = evt.payload.release.tag_name;
+    console.log("UPDATING!");
     //Asegurarnos de que el bot esta `ready`
     if(global.bot.readyAt) {
         global.bot.user.setGame("Actualizando a " + newVersion);
@@ -29,7 +33,7 @@ handler.on("release", (evt) => {
     server.close();
 
     //Clonar la nueva version a una carpeta paralela
-    child_process.execSync("git clone https:\/\/github.com/darkaqua/darkbot ../" + newVersion);
+    child_process.execSync("git clone -b master https:\/\/github.com/darkaqua/darkbot ../" + newVersion);
     process.chdir("../" + newVersion)
     //Instalar dependencias
     child_process.execSync("npm install");
@@ -40,6 +44,10 @@ handler.on("release", (evt) => {
     //Destruir el bot actual y ejecutar el nuevo.
     child_process.spawn("node", ["main.js", newVersion, global.config.version], { detached: true, stdio: ["ignore", stdio, stdio] });
     process.exit();
+});
+
+handler.on("error", (err) => {
+    console.log("Webhook Handler Error: " + err.message);
 });
 
 global.bot.on("ready", () => {
