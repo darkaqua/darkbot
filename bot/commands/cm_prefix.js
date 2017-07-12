@@ -13,7 +13,7 @@ module.exports = {
             const embed = new Discord.RichEmbed();
             embed.setDescription(`El prefijo tiene que ser uno de los siguientes caracteres: \`${punct.join(' ')}\``);
             embed.setColor(2527667);
-            message.author.send('', Discord.MessageOptions = { embed: embed });
+            message.author.send('', Discord.MessageOptions = { embed: embed }).catch(console.error);
         }
         message.delete();
     }

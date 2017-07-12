@@ -13,7 +13,7 @@ module.exports = {
             embed.setDescription("El estado debe ser `online`, `idle`, `invisible` o `dnd` (do not disturb).");
             embed.setColor(2527667);
 
-            message.author.send('', Discord.MessageOptions = { embed: embed });
+            message.author.send('', Discord.MessageOptions = { embed: embed }).catch(console.error);
         }
         message.delete();
     }

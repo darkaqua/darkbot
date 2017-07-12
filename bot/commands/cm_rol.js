@@ -20,18 +20,18 @@ module.exports = {
 		//busca que el argumento sea "leave" o "join"
 		if (args[1] === "join") {
 			message.member.addRole(rol).then(member =>
-				message.author.send(`Te has unido a \`${roleName}\``)
+				message.author.send(`Te has unido a \`${roleName}\``).catch(console.error)
 			).catch(err => {
-				message.author.send(`Se ha producido un error.`);
-				console.log(err.message);
+				message.author.send(`Se ha producido un error.`).catch(console.error);
+				console.error(err.message);
 			});
 			return;
 		} else if (args[1] === "leave") {
 			message.member.removeRole(rol).then(member =>
-				message.author.send(`Has salido de \`${roleName}\``)
+				message.author.send(`Has salido de \`${roleName}\``).catch(console.error)
 			).catch(err => {
-				message.author.send(`Se ha producido un error.`);
-				console.log(err.message);
+				message.author.send(`Se ha producido un error.`).catch(console.error);
+				console.error(err.message);
 			});
 			return;
 		}

@@ -24,7 +24,7 @@ exports.list = {
                     embed.addField(global.config.prefix + cmd, command.descr + " - " + command.roles.join());
                 }
             }
-            message.author.sendEmbed(embed);
+            message.author.send('', Discord.MessageOptions = { embed: embed }).catch(console.error);
             message.delete();
         }
     }
