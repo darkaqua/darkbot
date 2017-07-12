@@ -33,21 +33,21 @@ module.exports = {
         if(!args[1]) {
             //Si no se ha usado el comando correctamente, se le comunica al usuario
             //de manera privada.
-            message.author.sendMessage("Uso: !quote [id del mensaje] (mencion del canal) --- La id del canal se puede omitir si el mensaje original esta en el mismo canal.")
+            message.author.send("Uso: !quote [id del mensaje] (mencion del canal) --- La id del canal se puede omitir si el mensaje original esta en el mismo canal.")
         } else {
             //Si se ha mencionado un canal, el mensaje se busca en ese canal. En caso contrario, se busca
             //En el mismo canal del mensaje comando.
             let chan = message.mentions.channels.size > 0 ? message.mentions.channels.first() : message.channel;
             if(chan) {
                 chan.fetchMessage(args[1]).then(msg => {
-                    message.channel.sendEmbed(createEmbed(msg), `Citado por ${message.author}`);
+                    message.channel.send(`Citado por ${message.author}`, Discord.MessageOptions = { embed: createEmbed(msg) });
                 }).catch((err) => {
                     //Si ocurre un error, se le comunica al usuario de manera privada.
-                    message.author.sendMessage("Ha ocurrido un error, quizá el mensaje no existe.");
+                    message.author.send("Ha ocurrido un error, quizá el mensaje no existe.");
                 });
             } else {
                 //Si el canal no existe, se le comunica al usuario de manera privada.
-                message.author.sendMessage("El canal especificado no existe.");
+                message.author.send("El canal especificado no existe.");
             }
         }
         message.delete();
