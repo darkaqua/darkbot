@@ -25,7 +25,7 @@ module.exports = (message, issue) => {
                     .setURL(issue["html_url"])
                     .setColor(issue["pull_request"] ? "#eb6420" : "#009800")
                     .setFooter(issue["state"]);
-                message.channel.sendEmbed(embed);
+                message.channel.send('', Discord.MessageOptions = { embed: embed });
             }
         });
     });
