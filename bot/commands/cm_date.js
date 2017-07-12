@@ -9,7 +9,7 @@ module.exports = {
         embed.setDescription(`La fecha es \`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}\` en este servidor.`);
         embed.setColor(2527667);
 
-        message.channel.send(message.author.toString(), Discord.MessageOptions = { embed: embed });
+        message.channel.send(message.author.toString(), Discord.MessageOptions = { embed: embed }).catch(console.error);
         message.delete();
     }
 }

@@ -9,7 +9,7 @@ module.exports = {
         embed.setDescription(`Me encuentro en la versión ${global.config.version} ❤`);
         embed.setColor(2527667);
 
-        message.author.send('', Discord.MessageOptions = { embed: embed });
+        message.author.send('', Discord.MessageOptions = { embed: embed }).catch(console.error);
         message.delete();
     }
 }

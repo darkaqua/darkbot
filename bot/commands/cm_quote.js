@@ -40,14 +40,18 @@ module.exports = {
             let chan = message.mentions.channels.size > 0 ? message.mentions.channels.first() : message.channel;
             if(chan) {
                 chan.fetchMessage(args[1]).then(msg => {
-                    message.channel.send(`Citado por ${message.author}`, Discord.MessageOptions = { embed: createEmbed(msg) });
+                    message.channel.send(
+                        `Citado por ${message.author}`,
+                        Discord.MessageOptions = { embed: createEmbed(msg) }
+                    ).catch(console.error);
                 }).catch((err) => {
                     //Si ocurre un error, se le comunica al usuario de manera privada.
-                    message.author.send("Ha ocurrido un error, quizá el mensaje no existe.");
+                    message.author.send("Ha ocurrido un error, quizá el mensaje no existe.").catch(console.error);
+                    console.error(err);
                 });
             } else {
                 //Si el canal no existe, se le comunica al usuario de manera privada.
-                message.author.send("El canal especificado no existe.");
+                message.author.send("El canal especificado no existe.").catch(console.error);
             }
         }
         message.delete();

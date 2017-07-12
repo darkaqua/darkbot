@@ -13,7 +13,7 @@ module.exports = {
         embed.setTimestamp(new Date());
         embed.setThumbnail(global.bot.user.displayAvatarURL);
 
-        message.channel.send(message.author.toString(), Discord.MessageOptions = { embed: embed });
+        message.channel.send(message.author.toString(), Discord.MessageOptions = { embed: embed }).catch(console.error);
         message.delete();
     }
 }
