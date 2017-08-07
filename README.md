@@ -16,7 +16,11 @@ Versión antigua [aquí](https://github.com/darkaqua/darkbot_old)
 {
     "token": "<token aqui>",
     "prefix": "!",
-    "roles": ["<lista de roles auto-asignables>"],
+    "roles": {
+        "coder,code,dev": "<la id de [coder]>",
+        "artist,art": "<la id de [artist]>",
+        "gamedev,game": "<la id de [gamdev]>"
+    },
     "webhook": {
         "secret": "<password del webhook>",
         "port": 1337,
